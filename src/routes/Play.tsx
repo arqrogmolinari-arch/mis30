@@ -2,10 +2,11 @@ import { useParams } from 'react-router-dom'
 import { useRoom } from '../lib/room'
 import { getMyPlayerId } from '../lib/identity'
 import { Sparkles } from '../components/ui/Sparkles'
+import { GAMES } from '../games/registry'
 
 export default function Play() {
   const { code = '' } = useParams()
-  const { room, players } = useRoom(code)
+  const { room, players, answers, ttEntries } = useRoom(code)
   const myId = getMyPlayerId()
   const me = players.find((p) => p.id === myId)
 
@@ -16,8 +17,13 @@ export default function Play() {
     return <Center>Hola {me.name} 💖<br />Esperando que arranque el juego…</Center>
   }
 
-  // Game guest views wired in Task 8+.
-  return <Center>Juego activo (Task 8)</Center>
+  if (room.active_game && room.phase === 'playing') {
+    const cfg = GAMES[room.active_game]
+    const claimed = players.filter((p) => p.claimed_at)
+    return <div style={{ minHeight: '100vh' }}>{cfg.renderGuest({ room, players: claimed, answers, ttEntries, me })}</div>
+  }
+
+  return null
 }
 
 function Center({ children }: { children: React.ReactNode }) {

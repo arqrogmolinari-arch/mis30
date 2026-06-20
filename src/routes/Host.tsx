@@ -4,8 +4,9 @@ import { setActiveGame } from '../lib/actions'
 import { GameCard } from '../components/ui/GameCard'
 import { SeedPanel } from '../components/seed/SeedPanel'
 import type { GameId } from '../lib/types'
+import { GAMES } from '../games/registry'
 
-const GAMES: { id: GameId; title: string; emoji: string; gradient: string }[] = [
+const GAME_LIST: { id: GameId; title: string; emoji: string; gradient: string }[] = [
   { id: 'quiz', title: '¿Quién conoce a Rocío?', emoji: '🎤', gradient: 'linear-gradient(135deg,#FF4FB6,#B86CD9)' },
   { id: 'most_likely', title: '¿Quién es más probable?', emoji: '🔮', gradient: 'linear-gradient(135deg,#FF9E5E,#FF4FB6)' },
   { id: 'two_truths', title: 'Dos verdades, una mentira', emoji: '🎭', gradient: 'linear-gradient(135deg,#B86CD9,#FFB6D9)' },
@@ -13,12 +14,14 @@ const GAMES: { id: GameId; title: string; emoji: string; gradient: string }[] = 
 
 export default function Host() {
   const { code = '' } = useParams()
-  const { room, players } = useRoom(code)
+  const { room, players, answers, ttEntries } = useRoom(code)
   if (!room) return <div style={{ padding: 40 }}>Cargando…</div>
 
   async function start(game: GameId) {
-    // Per-game initial state is provided by the registry in Task 8+.
-    await setActiveGame(room!.id, game, { round_index: 0, prompt_index: 0, phase: 'init' })
+    const cfg = GAMES[game]
+    const claimed = players.filter((p) => p.claimed_at)
+    const init = cfg.initialState({ room: room!, players: claimed, answers: [], ttEntries: [] })
+    await setActiveGame(room!.id, game, init)
   }
 
   if (room.phase === 'lobby') {
@@ -27,17 +30,18 @@ export default function Host() {
         <h1 style={{ fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A' }}>Panel · {players.filter(p => p.claimed_at).length} en sala</h1>
         <p style={{ color: '#5A2A4A' }}>Elegí un juego:</p>
         <div style={{ display: 'grid', gap: 14 }}>
-          {GAMES.map((g) => <GameCard key={g.id} {...g} onClick={() => start(g.id)} />)}
+          {GAME_LIST.map((g) => <GameCard key={g.id} {...g} onClick={() => start(g.id)} />)}
         </div>
         <SeedPanel room={room} />
       </div>
     )
   }
 
-  // Game host controls wired in Task 8+.
-  return <GameHostControls code={code} />
-}
+  if (room.active_game) {
+    const cfg = GAMES[room.active_game]
+    const claimed = players.filter((p) => p.claimed_at)
+    return <div style={{ padding: 16 }}>{cfg.renderHost({ room, players: claimed, answers, ttEntries })}</div>
+  }
 
-function GameHostControls({ code }: { code: string }) {
-  return <div style={{ padding: 40, color: '#5A2A4A' }}>Controles del juego (Task 8). code={code}</div>
+  return null
 }

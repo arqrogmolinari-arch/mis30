@@ -3,16 +3,17 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useRoom } from '../lib/room'
 import { PlayerTile } from '../components/ui/PlayerTile'
 import { Sparkles } from '../components/ui/Sparkles'
+import { GAMES } from '../games/registry'
 
 export default function Screen() {
   const { code = '' } = useParams()
-  const { room, players } = useRoom(code)
+  const { room, players, answers, ttEntries } = useRoom(code)
   const joinUrl = `${window.location.origin}/join/${code}`
   const claimed = players.filter((p) => p.claimed_at)
 
-  // Game screens are wired in later tasks via the registry (Task 8+).
-  if (room && room.phase !== 'lobby' && room.active_game) {
-    return <GameScreenHost code={code} />
+  if (room && room.active_game && room.phase === 'playing') {
+    const cfg = GAMES[room.active_game]
+    return <div style={{ minHeight: '100vh' }}>{cfg.renderScreen({ room, players: claimed, answers, ttEntries })}</div>
   }
 
   return (
@@ -34,7 +35,3 @@ export default function Screen() {
   )
 }
 
-// Placeholder until Task 8 wires the registry-driven game screen.
-function GameScreenHost({ code }: { code: string }) {
-  return <div style={{ padding: 40, color: '#5A2A4A' }}>Juego activo (se implementa en Task 8). code={code}</div>
-}
