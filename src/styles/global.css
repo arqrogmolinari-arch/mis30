@@ -1,0 +1,10 @@
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: linear-gradient(135deg, #FFE4F1 0%, #FFB6D9 45%, #B86CD9 80%, #FF9E5E 100%);
+  background-attachment: fixed;
+}
+h1, h2, h3 { font-family: var(--font-display); }
+button { font-family: var(--font-body); }
