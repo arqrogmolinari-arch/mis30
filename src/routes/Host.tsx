@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useRoom } from '../lib/room'
-import { setActiveGame, setPhase, resetScores } from '../lib/actions'
+import { setActiveGame, setPhase, resetScores, clearGameData } from '../lib/actions'
 import { GameCard } from '../components/ui/GameCard'
 import { PillButton } from '../components/ui/PillButton'
 import { SeedPanel } from '../components/seed/SeedPanel'
@@ -21,6 +21,7 @@ export default function Host() {
   async function start(game: GameId) {
     const cfg = GAMES[game]
     const claimed = players.filter((p) => p.claimed_at)
+    await clearGameData(room!.id, game)  // fresh slate so a replay doesn't score stale answers
     const init = cfg.initialState({ room: room!, players: claimed, answers: [], ttEntries: [] })
     await setActiveGame(room!.id, game, init)
   }

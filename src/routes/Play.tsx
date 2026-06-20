@@ -17,6 +17,10 @@ export default function Play() {
     return <Center>Hola {me.name} 💖<br />Esperando que arranque el juego…</Center>
   }
 
+  if (room.phase === 'results') {
+    return <Center>Ranking final 🏆<br />Mirá la pantalla 💖</Center>
+  }
+
   if (room.active_game && room.phase === 'playing') {
     const cfg = GAMES[room.active_game]
     const claimed = players.filter((p) => p.claimed_at)

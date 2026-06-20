@@ -43,3 +43,16 @@ export async function addScores(deltas: Record<string, number>, players: Player[
 export async function resetScores(roomId: string): Promise<void> {
   await supabase.from('players').update({ score: 0 }).eq('room_id', roomId)
 }
+
+/**
+ * Clears a game's prior data so reselecting the same game starts fresh.
+ * Round keys are reused (e.g. `quiz:0`), so without this a replay would let the
+ * host reveal-and-score stale answers from the previous run. Scores in
+ * players.score are NOT touched (that's the cumulative global ranking).
+ */
+export async function clearGameData(roomId: string, game: GameId): Promise<void> {
+  await supabase.from('answers').delete().eq('room_id', roomId).eq('game', game)
+  if (game === 'two_truths') {
+    await supabase.from('two_truths_entries').delete().eq('room_id', roomId)
+  }
+}

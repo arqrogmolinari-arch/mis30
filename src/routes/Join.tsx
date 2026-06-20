@@ -32,7 +32,7 @@ export default function Join() {
       </div>
       {players.length === 0 && (
         <p style={{ textAlign: 'center', color: '#5A2A4A', marginTop: 24 }}>
-          No hay jugadores cargados. La host debe correr el seed desde /host.
+          No hay jugadores cargados. La host debe correr el seed desde el panel (/host/{code}).
         </p>
       )}
     </div>

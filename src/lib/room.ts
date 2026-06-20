@@ -27,7 +27,8 @@ export function useRoom(code: string): RoomState {
 
     async function loadRoom() {
       const { data } = await supabase.from('rooms').select('*').eq('code', code).single()
-      if (cancelled || !data) return
+      if (cancelled) return
+      if (!data) { setLoading(false); return }  // room missing: stop showing the loader
       roomId = data.id
       setRoom(data as Room)
       await Promise.all([loadPlayers(), loadAnswers(), loadTt()])
