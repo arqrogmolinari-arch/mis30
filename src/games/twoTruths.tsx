@@ -1,8 +1,148 @@
+import { useState } from 'react'
 import type { GameConfig } from './registry'
+import type { Player } from '../lib/types'
+import { PillButton } from '../components/ui/PillButton'
+import { PlayerTile } from '../components/ui/PlayerTile'
+import { patchGameState, submitAnswer, addScores } from '../lib/actions'
+import { saveTtEntry, shuffleOrder } from '../lib/tt'
+import { HostBackToHub } from './quiz'
+
+function roundKeyFor(playerId: string) { return `tt:${playerId}` }
+
 export const twoTruthsGame: GameConfig = {
   id: 'two_truths',
-  initialState: () => ({ phase: 'writing' }),
-  renderScreen: () => <div>two-truths (Task 11)</div>,
-  renderGuest: () => <div>two-truths (Task 11)</div>,
-  renderHost: () => <div>two-truths (Task 11)</div>,
+  initialState: () => ({ phase: 'writing', done_player_ids: [] }),
+
+  renderScreen: ({ room, players, ttEntries, answers }) => {
+    const gs = room.game_state
+    if (gs.phase === 'writing') {
+      return (
+        <div style={{ padding: 32, textAlign: 'center' }}>
+          <h2 style={{ fontFamily: 'Baloo 2', fontSize: 40, color: '#5A2A4A' }}>Cargá tus 3 frases ✍️</h2>
+          <p style={{ fontSize: 28, color: '#5A2A4A' }}>{ttEntries.length} de {players.length} listos</p>
+        </div>
+      )
+    }
+    const current = players.find((p) => p.id === gs.current_player_id)
+    const entry = ttEntries.find((e) => e.player_id === gs.current_player_id)
+    if (!current || !entry) return <div style={{ padding: 40, color: '#5A2A4A' }}>Esperando…</div>
+    const order = gs.shuffle ?? shuffleOrder(0)
+    const votes = answers.filter((a) => a.round_key === roundKeyFor(current.id))
+    const guessedRight = votes.filter((v) => v.value === entry.lie_index).length
+    return (
+      <div style={{ padding: 32, textAlign: 'center' }}>
+        <PlayerTile player={current} size={110} />
+        <div style={{ display: 'grid', gap: 12, maxWidth: 560, margin: '20px auto' }}>
+          {order.map((si) => {
+            const isLie = si === entry.lie_index
+            const reveal = gs.phase === 'revealing'
+            return (
+              <div key={si} style={{
+                padding: 18, borderRadius: 16, fontSize: 22, color: '#5A2A4A',
+                background: reveal && isLie ? '#FF9E5E' : 'rgba(255,255,255,0.75)',
+                boxShadow: '0 4px 0 rgba(90,42,74,0.2)',
+              }}>{entry.statements[si]}{reveal && isLie ? '  ← mentira 🤥' : ''}</div>
+            )
+          })}
+        </div>
+        {gs.phase === 'revealing' && <p style={{ color: '#5A2A4A', fontSize: 24 }}>{guessedRight} la descubrieron</p>}
+      </div>
+    )
+  },
+
+  renderGuest: ({ room, answers, ttEntries, me }) => {
+    if (!me) return null
+    const gs = room.game_state
+    if (gs.phase === 'writing') return <WriteForm roomId={room.id} me={me} done={!!ttEntries.find((e) => e.player_id === me.id)} />
+    const current = gs.current_player_id
+    if (current === me.id) return <div style={{ padding: 24, textAlign: 'center', fontSize: 26 }}>¡Es tu turno! Mirá la pantalla 👀</div>
+    const entry = ttEntries.find((e) => e.player_id === current)
+    if (!entry || gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla 👀</div>
+    const order = gs.shuffle ?? shuffleOrder(0)
+    const myVote = answers.find((a) => a.round_key === roundKeyFor(current!) && a.player_id === me.id)
+    return (
+      <div style={{ padding: 16, display: 'grid', gap: 12 }}>
+        <p style={{ textAlign: 'center', color: '#5A2A4A' }}>¿Cuál es la mentira?</p>
+        {order.map((si) => (
+          <PillButton key={si} variant="ghost" selected={myVote?.value === si}
+            onClick={() => submitAnswer(room.id, me.id, 'two_truths', roundKeyFor(current!), si)}>
+            {entry.statements[si]}
+          </PillButton>
+        ))}
+      </div>
+    )
+  },
+
+  renderHost: ({ room, players, ttEntries, answers }) => {
+    const gs = room.game_state
+    const done = gs.done_player_ids ?? []
+
+    async function startGuessing(p: Player) {
+      const seed = (ttEntries.findIndex((e) => e.player_id === p.id) + 1) * 7
+      await patchGameState(room.id, gs, {
+        phase: 'guessing', current_player_id: p.id, shuffle: shuffleOrder(seed),
+      })
+    }
+    async function reveal() {
+      const cur = gs.current_player_id!
+      const entry = ttEntries.find((e) => e.player_id === cur)
+      if (!entry) return
+      const deltas: Record<string, number> = {}
+      const votes = answers.filter((a) => a.round_key === roundKeyFor(cur))
+      votes.filter((v) => v.value === entry.lie_index).forEach((v) => { deltas[v.player_id] = 1 })
+      const fooled = votes.filter((v) => v.value !== entry.lie_index).length
+      if (fooled > 0) deltas[cur] = (deltas[cur] ?? 0) + fooled
+      if (Object.keys(deltas).length) await addScores(deltas, players)
+      await patchGameState(room.id, gs, { phase: 'revealing' })
+    }
+    async function nextPlayer() {
+      const cur = gs.current_player_id!
+      await patchGameState(room.id, gs, {
+        phase: 'picking', current_player_id: null, done_player_ids: [...done, cur],
+      })
+    }
+
+    if (gs.phase === 'writing' || gs.phase === 'picking' || gs.phase === 'init') {
+      const remaining = players.filter((p) => ttEntries.find((e) => e.player_id === p.id) && !done.includes(p.id))
+      return (
+        <div style={{ padding: 20, display: 'grid', gap: 10 }}>
+          <p style={{ color: '#5A2A4A' }}>{ttEntries.length}/{players.length} cargaron · elegí a quién le toca:</p>
+          {remaining.map((p) => <PillButton key={p.id} variant="ghost" onClick={() => startGuessing(p)}>{p.name}</PillButton>)}
+          {remaining.length === 0 && <HostBackToHub room={room} />}
+        </div>
+      )
+    }
+    return (
+      <div style={{ padding: 20, display: 'grid', gap: 12 }}>
+        {gs.phase === 'guessing' && <PillButton onClick={reveal}>Cerrar y revelar</PillButton>}
+        {gs.phase === 'revealing' && <PillButton onClick={nextPlayer}>Siguiente jugador</PillButton>}
+      </div>
+    )
+  },
+}
+
+function WriteForm({ roomId, me, done }: { roomId: string; me: Player; done: boolean }) {
+  const [s, setS] = useState(['', '', ''])
+  const [lie, setLie] = useState<number | null>(null)
+  if (done) return <div style={{ padding: 24, textAlign: 'center', fontSize: 24 }}>¡Listo! Esperá tu turno 🎀</div>
+  const ready = s.every((x) => x.trim()) && lie !== null
+  return (
+    <div style={{ padding: 16, display: 'grid', gap: 12 }}>
+      <p style={{ textAlign: 'center', color: '#5A2A4A' }}>2 verdades + 1 mentira. Marcá la mentira.</p>
+      {s.map((val, i) => (
+        <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input value={val} placeholder={`Frase ${i + 1}`} onChange={(e) => {
+            const n = [...s]; n[i] = e.target.value; setS(n)
+          }} style={{ flex: 1, padding: 12, borderRadius: 12, border: '2px solid #FFB6D9', fontSize: 16 }} />
+          <button onClick={() => setLie(i)} style={{
+            padding: '10px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
+            background: lie === i ? '#FF4FB6' : 'rgba(255,255,255,0.7)', color: lie === i ? '#fff' : '#5A2A4A',
+          }}>mentira</button>
+        </div>
+      ))}
+      <PillButton disabled={!ready} onClick={() => saveTtEntry(roomId, me.id, [s[0], s[1], s[2]], lie!)}>
+        Guardar
+      </PillButton>
+    </div>
+  )
 }
