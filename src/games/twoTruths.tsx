@@ -9,9 +9,17 @@ import { HostBackToHub } from './quiz'
 
 function roundKeyFor(playerId: string) { return `tt:${playerId}` }
 
+// Host-local guard: player turns already scored this session. Prevents a double
+// "reveal" tap from double-awarding (the rooms phase event lands after the players
+// score event, so a game_state-based guard can't close the window). Cleared on start.
+const revealedTurns = new Set<string>()
+
 export const twoTruthsGame: GameConfig = {
   id: 'two_truths',
-  initialState: () => ({ phase: 'writing', done_player_ids: [] }),
+  initialState: () => {
+    revealedTurns.clear()
+    return { phase: 'writing', done_player_ids: [] }
+  },
 
   renderScreen: ({ room, players, ttEntries, answers }) => {
     const gs = room.game_state
@@ -85,8 +93,10 @@ export const twoTruthsGame: GameConfig = {
     }
     async function reveal() {
       const cur = gs.current_player_id!
+      if (revealedTurns.has(roundKeyFor(cur))) return  // already revealed/scored this turn — block double-tap
       const entry = ttEntries.find((e) => e.player_id === cur)
       if (!entry) return
+      revealedTurns.add(roundKeyFor(cur))
       const deltas: Record<string, number> = {}
       const votes = answers.filter((a) => a.round_key === roundKeyFor(cur))
       votes.filter((v) => v.value === entry.lie_index).forEach((v) => { deltas[v.player_id] = 1 })

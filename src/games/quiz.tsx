@@ -12,12 +12,21 @@ const TIMER_SECONDS = 20
 
 function roundKey(i: number) { return `quiz:${i}` }
 
+// Host-local guard: rounds already scored this game session. Prevents a double
+// "reveal" tap from double-awarding, since the rooms phase-change event arrives
+// AFTER the players score event (so a game_state-based guard can't close the window).
+// Cleared in initialState so replaying the game after a reset scores fresh.
+const revealedRounds = new Set<string>()
+
 export const quizGame: GameConfig = {
   id: 'quiz',
-  initialState: () => ({
-    round_index: 0, round_key: roundKey(0), phase: 'asking',
-    timer_ends_at: new Date(Date.now() + TIMER_SECONDS * 1000).toISOString(),
-  }),
+  initialState: () => {
+    revealedRounds.clear()
+    return {
+      round_index: 0, round_key: roundKey(0), phase: 'asking',
+      timer_ends_at: new Date(Date.now() + TIMER_SECONDS * 1000).toISOString(),
+    }
+  },
 
   renderScreen: ({ room, players, answers }) => {
     const gs = room.game_state
@@ -72,6 +81,9 @@ export const quizGame: GameConfig = {
     const last = i >= QUESTIONS.length - 1
 
     async function reveal() {
+      const key = roundKey(i)
+      if (revealedRounds.has(key)) return  // already revealed/scored this round — block double-tap
+      revealedRounds.add(key)
       const q = QUESTIONS[i]
       const deltas: Record<string, number> = {}
       answers.filter((a) => a.round_key === roundKey(i) && a.value === q.correct)
