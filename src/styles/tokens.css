@@ -1,2 +1,11 @@
-/* filled in Task 9 */
-:root { --pink-hot: #FF4FB6; }
+:root {
+  --pink-hot: #FF4FB6;
+  --pink-bubble: #FFB6D9;
+  --pink-pale: #FFE4F1;
+  --purple-y2k: #B86CD9;
+  --orange-glow: #FF9E5E;
+  --cream: #FFF6EE;
+  --ink: #5A2A4A;
+  --font-display: 'Baloo 2', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+}
