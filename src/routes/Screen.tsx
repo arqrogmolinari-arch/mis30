@@ -4,12 +4,17 @@ import { useRoom } from '../lib/room'
 import { PlayerTile } from '../components/ui/PlayerTile'
 import { Sparkles } from '../components/ui/Sparkles'
 import { GAMES } from '../games/registry'
+import { Results } from '../components/Results'
 
 export default function Screen() {
   const { code = '' } = useParams()
   const { room, players, answers, ttEntries } = useRoom(code)
   const joinUrl = `${window.location.origin}/join/${code}`
   const claimed = players.filter((p) => p.claimed_at)
+
+  if (room && room.phase === 'results') {
+    return <Results players={claimed} />
+  }
 
   if (room && room.active_game && room.phase === 'playing') {
     const cfg = GAMES[room.active_game]

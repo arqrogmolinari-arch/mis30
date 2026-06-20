@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom'
 import { useRoom } from '../lib/room'
-import { setActiveGame } from '../lib/actions'
+import { setActiveGame, setPhase, resetScores } from '../lib/actions'
 import { GameCard } from '../components/ui/GameCard'
+import { PillButton } from '../components/ui/PillButton'
 import { SeedPanel } from '../components/seed/SeedPanel'
 import type { GameId } from '../lib/types'
 import { GAMES } from '../games/registry'
@@ -24,6 +25,14 @@ export default function Host() {
     await setActiveGame(room!.id, game, init)
   }
 
+  if (room.phase === 'results') {
+    return (
+      <div style={{ padding: 20, display: 'grid', gap: 12 }}>
+        <PillButton onClick={() => setPhase(room!.id, 'lobby')}>Volver al lobby</PillButton>
+      </div>
+    )
+  }
+
   if (room.phase === 'lobby') {
     return (
       <div style={{ padding: 20, maxWidth: 520, margin: '0 auto' }}>
@@ -33,6 +42,12 @@ export default function Host() {
           {GAME_LIST.map((g) => <GameCard key={g.id} {...g} onClick={() => start(g.id)} />)}
         </div>
         <SeedPanel room={room} />
+        <div style={{ display: 'grid', gap: 10, marginTop: 20 }}>
+          <PillButton onClick={() => setPhase(room!.id, 'results')}>Cerrar la noche · ranking final 🏆</PillButton>
+          <PillButton variant="ghost" onClick={async () => {
+            if (confirm('¿Reiniciar puntajes a 0?')) await resetScores(room!.id)
+          }}>Reiniciar puntajes</PillButton>
+        </div>
       </div>
     )
   }
