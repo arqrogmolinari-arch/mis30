@@ -1,8 +1,18 @@
 [
-  { "slug": "rocio", "name": "Rocío" },
-  { "slug": "sofi", "name": "Sofi" },
-  { "slug": "mati", "name": "Mati" },
-  { "slug": "lu", "name": "Lu" },
-  { "slug": "juan", "name": "Juan" },
-  { "slug": "caro", "name": "Caro" }
+  { "slug": "ro", "name": "Ro" },
+  { "slug": "nico", "name": "Nico" },
+  { "slug": "tomi", "name": "Tomi" },
+  { "slug": "moli", "name": "Moli" },
+  { "slug": "moni-b", "name": "Moni B" },
+  { "slug": "moni-m", "name": "Moni M" },
+  { "slug": "sandri", "name": "Sandri" },
+  { "slug": "jose", "name": "Jose" },
+  { "slug": "agus", "name": "Agus" },
+  { "slug": "sol", "name": "Sol" },
+  { "slug": "orne", "name": "Orne" },
+  { "slug": "mija", "name": "Mija" },
+  { "slug": "ailu", "name": "Ailu" },
+  { "slug": "fede", "name": "Fede" },
+  { "slug": "gonza", "name": "Gonza" },
+  { "slug": "gabi", "name": "Gabi" }
 ]
