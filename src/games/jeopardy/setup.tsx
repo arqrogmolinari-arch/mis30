@@ -50,11 +50,12 @@ export function SetupPanel({ ctx }: { ctx: GameContext }) {
     )
   }
 
-  const canStart = teams.every((t) => t.member_ids.length > 0 && t.captain_id !== '')
+  const activeTeams = teams.filter((t) => t.member_ids.length > 0)
+  const canStart = activeTeams.length >= 2 && activeTeams.every((t) => t.captain_id !== '')
 
   async function handleStart() {
     setSaving(true)
-    await setTeams(room.id, teams as JeopardyTeam[])
+    await setTeams(room.id, activeTeams as JeopardyTeam[])
     await patchGameState(room.id, gs, {
       phase: 'picking',
       current_team_index: 0,
@@ -159,7 +160,9 @@ export function SetupPanel({ ctx }: { ctx: GameContext }) {
         </PillButton>
         {!canStart && (
           <p style={{ fontSize: 11, color: '#aaa', textAlign: 'center', marginTop: 6 }}>
-            Cada equipo necesita jugadores y un capitán (⭐)
+            {activeTeams.length < 2
+              ? 'Necesitás al menos 2 equipos con jugadores'
+              : 'Cada equipo con jugadores necesita un capitán (⭐)'}
           </p>
         )}
       </div>
