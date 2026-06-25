@@ -137,20 +137,23 @@ function WriteForm({ roomId, me, done }: { roomId: string; me: Player; done: boo
   if (done) return <div style={{ padding: 24, textAlign: 'center', fontSize: 24 }}>¡Listo! Esperá tu turno 🎀</div>
   const ready = s.every((x) => x.trim()) && lie !== null
   return (
-    <div style={{ padding: 16, display: 'grid', gap: 12 }}>
-      <p style={{ textAlign: 'center', color: '#5A2A4A' }}>2 verdades + 1 mentira. Marcá la mentira.</p>
+    <div style={{ padding: '16px 12px 32px', display: 'grid', gap: 14 }}>
+      <p style={{ textAlign: 'center', color: '#5A2A4A', fontSize: 15, margin: 0 }}>2 verdades + 1 mentira. Marcá cuál es la mentira.</p>
       {s.map((val, i) => (
-        <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'stretch' }}>
           <input value={val} placeholder={`Frase ${i + 1}`} onChange={(e) => {
             const n = [...s]; n[i] = e.target.value; setS(n)
-          }} style={{ flex: 1, padding: 12, borderRadius: 12, border: '2px solid #FFB6D9', fontSize: 16 }} />
+          }} style={{ padding: '12px 14px', borderRadius: 12, border: '2px solid #FFB6D9',
+            fontSize: 16, fontFamily: 'Quicksand, sans-serif', color: '#5A2A4A' }} />
           <button onClick={() => setLie(i)} style={{
-            padding: '10px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
+            padding: '0 14px', borderRadius: 12, border: 'none', cursor: 'pointer', fontWeight: 700,
+            fontFamily: 'Quicksand, sans-serif', fontSize: 14, touchAction: 'manipulation',
             background: lie === i ? '#FF4FB6' : 'rgba(255,255,255,0.7)', color: lie === i ? '#fff' : '#5A2A4A',
-          }}>mentira</button>
+          }}>🤥</button>
         </div>
       ))}
-      <PillButton disabled={!ready} onClick={() => saveTtEntry(roomId, me.id, [s[0], s[1], s[2]], lie!)}>
+      <PillButton disabled={!ready} style={{ width: '100%' }}
+        onClick={() => saveTtEntry(roomId, me.id, [s[0], s[1], s[2]], lie!)}>
         Guardar
       </PillButton>
     </div>

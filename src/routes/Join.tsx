@@ -19,12 +19,14 @@ export default function Join() {
   if (loading) return <Center>Cargando… 🎀</Center>
 
   return (
-    <div style={{ minHeight: '100vh', padding: '24px 16px', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', padding: '20px 12px 32px', position: 'relative' }}>
       <Sparkles />
       <h1 style={{ textAlign: 'center', fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A',
-        textTransform: 'uppercase', textShadow: '2px 2px 0 rgba(255,255,255,0.6)' }}>¿Quién sos? 🎀</h1>
-      <p style={{ textAlign: 'center', color: '#5A2A4A', opacity: 0.8 }}>Tocá tu foto para entrar</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginTop: 16,
+        textTransform: 'uppercase', textShadow: '2px 2px 0 rgba(255,255,255,0.6)',
+        fontSize: 'clamp(22px, 6vw, 32px)', margin: '0 0 4px' }}>¿Quién sos? 🎀</h1>
+      <p style={{ textAlign: 'center', color: '#5A2A4A', opacity: 0.8,
+        fontSize: 'clamp(14px, 4vw, 17px)', margin: '0 0 16px' }}>Tocá tu foto para entrar</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10,
         position: 'relative', zIndex: 1 }}>
         {players.map((p) => (
           <PlayerTile key={p.id} player={p} dim={!!p.claimed_at} onClick={() => pick(p.id)} />

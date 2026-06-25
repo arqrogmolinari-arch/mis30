@@ -66,9 +66,10 @@ export const quizGame: GameConfig = {
       return <div style={{ padding: 24, textAlign: 'center', fontSize: 28 }}>{ok ? '¡Acertaste! ✓' : 'Casi… ✗'}</div>
     }
     return (
-      <div style={{ padding: 16, display: 'grid', gap: 12 }}>
+      <div style={{ padding: '16px 12px 32px', display: 'grid', gap: 12 }}>
         {q.options.map((opt, oi) => (
           <PillButton key={oi} variant="ghost" selected={myAnswer?.value === oi}
+            style={{ width: '100%', fontSize: 'clamp(15px, 4vw, 18px)', textTransform: 'none', letterSpacing: 0 }}
             onClick={() => submitAnswer(room.id, me.id, 'quiz', roundKey(i), oi)}>{opt}</PillButton>
         ))}
       </div>

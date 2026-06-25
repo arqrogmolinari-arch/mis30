@@ -51,9 +51,9 @@ export const mostLikelyGame: GameConfig = {
     if (gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla 👀</div>
     const myVote = answers.find((a) => a.round_key === roundKey(i) && a.player_id === me.id)
     return (
-      <div style={{ padding: 16, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+      <div style={{ padding: '0 12px 24px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
         {players.map((p) => (
-          <PlayerTile key={p.id} player={p} size={86} selected={myVote?.value === p.id}
+          <PlayerTile key={p.id} player={p} selected={myVote?.value === p.id}
             onClick={() => submitAnswer(room.id, me.id, 'most_likely', roundKey(i), p.id)} />
         ))}
       </div>
