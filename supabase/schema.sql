@@ -8,7 +8,8 @@ create table if not exists rooms (
   code text unique not null,
   phase text not null default 'lobby',          -- lobby | playing | results
   active_game text,                              -- quiz | two_truths | most_likely | null
-  game_state jsonb not null default '{}'::jsonb
+  game_state jsonb not null default '{}'::jsonb,
+  teams jsonb not null default '[]'::jsonb  -- active_game now also accepts 'jeopardy'
 );
 
 create table if not exists players (

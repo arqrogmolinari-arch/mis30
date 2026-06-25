@@ -1,5 +1,0 @@
-[
-  { "q": "¿Cuál fue mi primer trabajo?", "options": ["Niñera", "Moza", "Vendedora", "Recepcionista"], "correct": 1 },
-  { "q": "¿Mi comida favorita?", "options": ["Sushi", "Milanesa", "Pizza", "Tacos"], "correct": 2 },
-  { "q": "¿A qué le tengo más miedo?", "options": ["Arañas", "Alturas", "Payasos", "Oscuridad"], "correct": 0 }
-]

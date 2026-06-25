@@ -5,7 +5,7 @@ import { PillButton } from '../components/ui/PillButton'
 import { PlayerTile } from '../components/ui/PlayerTile'
 import { patchGameState, submitAnswer, addScores } from '../lib/actions'
 import { saveTtEntry, shuffleOrder } from '../lib/tt'
-import { HostBackToHub } from './quiz'
+import { HostBackToHub } from './shared'
 
 function roundKeyFor(playerId: string) { return `tt:${playerId}` }
 
@@ -122,8 +122,28 @@ export const twoTruthsGame: GameConfig = {
         </div>
       )
     }
+    const currentEntry = ttEntries.find((e) => e.player_id === gs.current_player_id)
+    const currentPlayer = players.find((p) => p.id === gs.current_player_id)
     return (
-      <div style={{ padding: 20, display: 'grid', gap: 12 }}>
+      <div style={{ padding: 20, display: 'grid', gap: 10 }}>
+        {currentPlayer && (
+          <p style={{ fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, color: '#5A2A4A', fontSize: 16, margin: 0 }}>
+            {currentPlayer.name}
+          </p>
+        )}
+        {currentEntry && (
+          <div style={{ display: 'grid', gap: 6 }}>
+            {currentEntry.statements.map((s, si) => (
+              <div key={si} style={{
+                padding: '8px 12px', borderRadius: 10, fontSize: 13, color: '#5A2A4A',
+                background: gs.phase === 'revealing' && si === currentEntry.lie_index
+                  ? 'rgba(255,158,94,0.4)' : 'rgba(255,255,255,0.7)',
+              }}>
+                {s}{gs.phase === 'revealing' && si === currentEntry.lie_index ? ' 🤥' : ''}
+              </div>
+            ))}
+          </div>
+        )}
         {gs.phase === 'guessing' && <PillButton onClick={reveal}>Cerrar y revelar</PillButton>}
         {gs.phase === 'revealing' && <PillButton onClick={nextPlayer}>Siguiente jugador</PillButton>}
       </div>

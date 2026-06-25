@@ -8,7 +8,7 @@ import type { GameId } from '../lib/types'
 import { GAMES } from '../games/registry'
 
 const GAME_LIST: { id: GameId; title: string; emoji: string; gradient: string }[] = [
-  { id: 'quiz', title: '¿Quién conoce a Rocío?', emoji: '🎤', gradient: 'linear-gradient(135deg,#FF4FB6,#B86CD9)' },
+  { id: 'jeopardy', title: 'Jeopardy: ¿Quién conoce a Rocío?', emoji: '🎯', gradient: 'linear-gradient(135deg,#FF4FB6,#B86CD9)' },
   { id: 'most_likely', title: '¿Quién es más probable?', emoji: '🔮', gradient: 'linear-gradient(135deg,#FF9E5E,#FF4FB6)' },
   { id: 'two_truths', title: 'Dos verdades, una mentira', emoji: '🎭', gradient: 'linear-gradient(135deg,#B86CD9,#FFB6D9)' },
 ]
@@ -57,7 +57,29 @@ export default function Host() {
   if (room.active_game) {
     const cfg = GAMES[room.active_game]
     const claimed = players.filter((p) => p.claimed_at)
-    return <div style={{ padding: 16 }}>{cfg.renderHost({ room, players: claimed, answers, ttEntries })}</div>
+    return (
+      <div>
+        <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(90,42,74,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button
+            onClick={() => { if (confirm('¿Salir del juego actual?')) setActiveGame(room!.id, null, {}) }}
+            style={{
+              background: 'transparent', border: '2px solid rgba(90,42,74,0.25)',
+              color: '#5A2A4A', borderRadius: 20, padding: '6px 16px',
+              cursor: 'pointer', fontFamily: 'Quicksand, sans-serif',
+              fontWeight: 700, fontSize: 13, touchAction: 'manipulation',
+            }}
+          >
+            ← Salir
+          </button>
+          <span style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 700, color: '#5A2A4A', fontSize: 13, opacity: 0.6 }}>
+            {cfg.id === 'jeopardy' ? '🎯 Jeopardy' : cfg.id === 'most_likely' ? '🔮 Más probable' : '🎭 Dos verdades'}
+          </span>
+        </div>
+        <div style={{ padding: 16 }}>
+          {cfg.renderHost({ room, players: claimed, answers, ttEntries })}
+        </div>
+      </div>
+    )
   }
 
   return null

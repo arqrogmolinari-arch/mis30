@@ -1,0 +1,54 @@
+{
+  "categories": [
+    {
+      "name": "Arquitectura",
+      "questions": [
+        { "value": 100, "q": "¿En qué ciudad se encuentra la Torre Eiffel?", "a": "París", "accept": ["paris", "parís"] },
+        { "value": 200, "q": "¿Cómo se llama el edificio más alto del mundo?", "a": "Burj Khalifa", "accept": ["burj", "khalifa"] },
+        { "value": 300, "q": "¿Qué arquitecto diseñó la Sagrada Familia en Barcelona?", "a": "Antoni Gaudí", "accept": ["gaudi", "gaudí"] },
+        { "value": 400, "q": "¿En qué país se encuentra la ciudadela inca de Machu Picchu?", "a": "Perú", "accept": ["peru", "perú"] },
+        { "value": 500, "q": "¿Cómo se llama el estilo medieval con arcos apuntados, rosetones y arbotantes?", "a": "Gótico", "accept": ["gotico", "gótico"] }
+      ]
+    },
+    {
+      "name": "Tecnología",
+      "questions": [
+        { "value": 100, "q": "¿Qué empresa creó el iPhone?", "a": "Apple", "accept": ["apple"] },
+        { "value": 200, "q": "¿En qué año se lanzó Facebook al público?", "a": "2004", "accept": ["2004"] },
+        { "value": 300, "q": "¿Qué significa la sigla GPS?", "a": "Global Positioning System", "accept": ["global positioning", "posicionamiento global", "positioning system"] },
+        { "value": 400, "q": "¿Cómo se llama el asistente de voz virtual de Apple?", "a": "Siri", "accept": ["siri"] },
+        { "value": 500, "q": "¿Qué lenguaje de programación creó Guido van Rossum?", "a": "Python", "accept": ["python"] }
+      ]
+    },
+    {
+      "name": "Cultura Pop 2000s",
+      "questions": [
+        { "value": 100, "q": "¿Quién cantó \"Baby One More Time\"?", "a": "Britney Spears", "accept": ["britney", "spears"] },
+        { "value": 200, "q": "¿Cómo se llamaba la línea de muñecas rival de Barbie, furor en los 2000?", "a": "Bratz", "accept": ["bratz"] },
+        { "value": 300, "q": "¿Qué programa argentino de los 2000 lanzó al grupo Erreway?", "a": "Rebelde Way", "accept": ["rebelde"] },
+        { "value": 400, "q": "¿Quién interpretó a Hannah Montana en la serie de Disney Channel?", "a": "Miley Cyrus", "accept": ["miley", "cyrus"] },
+        { "value": 500, "q": "¿Cómo se llamaba el personaje de Lindsay Lohan en \"Chica Mala\"?", "a": "Cady Heron", "accept": ["cady", "heron"] }
+      ]
+    },
+    {
+      "name": "Sobre Ro",
+      "questions": [
+        { "value": 100, "q": "¿Qué proteína no puede faltar en la heladera de Ro?", "a": "Suprema de pollo", "accept": ["suprema", "pollo"] },
+        { "value": 200, "q": "¿Qué bebida toma Ro al menos dos veces por día?", "a": "Café con leche", "accept": ["cafe", "café"] },
+        { "value": 300, "q": "¿Cuál es la fobia más peculiar de Ro? (hay dos respuestas válidas)", "a": "Polillas / Pies", "accept": ["polilla", "polillas", "pies", "pie"] },
+        { "value": 400, "q": "¿Qué comida pone extremadamente feliz a Ro... y a muchos otros no tanto?", "a": "Hígado con papas fritas", "accept": ["higado", "hígado"] },
+        { "value": 500, "q": "¿Quiénes son los cantantes favoritos de Ro últimamente? (son dos, con uno alcanza)", "a": "Michael Bublé y Frank Sinatra", "accept": ["buble", "bublé", "sinatra", "michael buble", "frank sinatra"] }
+      ]
+    },
+    {
+      "name": "Por el mundo",
+      "questions": [
+        { "value": 100, "q": "¿Cuál es la capital de Francia?", "a": "París", "accept": ["paris", "parís"] },
+        { "value": 200, "q": "¿En qué continente se encuentra Egipto?", "a": "África", "accept": ["africa", "áfrica"] },
+        { "value": 300, "q": "¿Cuál es el país más grande del mundo por superficie?", "a": "Rusia", "accept": ["rusia", "russia"] },
+        { "value": 400, "q": "¿Cómo se llama la moneda oficial de Japón?", "a": "Yen", "accept": ["yen"] },
+        { "value": 500, "q": "¿En qué país está Estambul, la ciudad que conecta Europa y Asia?", "a": "Turquía", "accept": ["turquia", "turquía", "turkey"] }
+      ]
+    }
+  ]
+}

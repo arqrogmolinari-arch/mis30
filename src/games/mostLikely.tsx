@@ -3,7 +3,7 @@ import type { GameConfig } from './registry'
 import { PlayerTile } from '../components/ui/PlayerTile'
 import { PillButton } from '../components/ui/PillButton'
 import { patchGameState, submitAnswer } from '../lib/actions'
-import { HostBackToHub } from './quiz'
+import { HostBackToHub } from './shared'
 
 const PROMPTS = promptData as string[]
 function roundKey(i: number) { return `ml:${i}` }
@@ -72,7 +72,8 @@ export const mostLikelyGame: GameConfig = {
     }
     return (
       <div style={{ padding: 20, display: 'grid', gap: 12 }}>
-        <p style={{ color: '#5A2A4A' }}>Prompt {i + 1}/{PROMPTS.length} · {gs.phase}</p>
+        <p style={{ color: '#5A2A4A', margin: 0 }}>Prompt {i + 1}/{PROMPTS.length} · {gs.phase}</p>
+        <p style={{ fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, color: '#5A2A4A', fontSize: 18, margin: 0 }}>{PROMPTS[i]}</p>
         {gs.phase === 'voting' && <PillButton onClick={close}>Cerrar votación</PillButton>}
         {gs.phase === 'revealing' && !last && <PillButton onClick={next}>Siguiente</PillButton>}
         {gs.phase === 'revealing' && last && <HostBackToHub room={room} />}

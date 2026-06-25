@@ -55,4 +55,23 @@ export async function clearGameData(roomId: string, game: GameId): Promise<void>
   if (game === 'two_truths') {
     await supabase.from('two_truths_entries').delete().eq('room_id', roomId)
   }
+  if (game === 'jeopardy') {
+    await supabase.from('rooms').update({ teams: [] }).eq('id', roomId)
+  }
+}
+
+export async function setTeams(roomId: string, teams: import('./types').JeopardyTeam[]): Promise<void> {
+  await supabase.from('rooms').update({ teams }).eq('id', roomId)
+}
+
+export async function updateTeamScore(
+  roomId: string,
+  teams: import('./types').JeopardyTeam[],
+  teamId: string,
+  delta: number,
+): Promise<void> {
+  const updated = teams.map((t) =>
+    t.id === teamId ? { ...t, score: Math.max(0, t.score + delta) } : t,
+  )
+  await supabase.from('rooms').update({ teams: updated }).eq('id', roomId)
 }

@@ -1,5 +1,14 @@
 export type Phase = 'lobby' | 'playing' | 'results'
-export type GameId = 'quiz' | 'two_truths' | 'most_likely'
+export type GameId = 'quiz' | 'two_truths' | 'most_likely' | 'jeopardy'
+
+export interface JeopardyTeam {
+  id: string
+  name: string
+  color: string
+  member_ids: string[]
+  captain_id: string
+  score: number
+}
 
 export interface Room {
   id: string
@@ -7,17 +16,25 @@ export interface Room {
   phase: Phase
   active_game: GameId | null
   game_state: GameState
+  teams: JeopardyTeam[]
 }
 
 export interface GameState {
+  // shared
   round_index?: number
   prompt_index?: number
   round_key?: string
-  phase?: string            // per-game internal phase
+  phase?: string
   timer_ends_at?: string | null
   current_player_id?: string | null
   done_player_ids?: string[]
-  shuffle?: number[]        // random order of statements for two-truths
+  shuffle?: number[]
+  // jeopardy
+  current_team_index?: number
+  board?: boolean[][]
+  active_q?: { cat_i: number; val_i: number } | null
+  steal_open?: boolean
+  overrides?: Record<string, 'correct' | 'incorrect'>
 }
 
 export interface Player {

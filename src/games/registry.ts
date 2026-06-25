@@ -17,12 +17,12 @@ export interface GameConfig {
   renderHost: (ctx: GameContext) => ReactNode
 }
 
-import { quizGame } from './quiz'
+import { jeopardyGame } from './jeopardy/index'
 import { mostLikelyGame } from './mostLikely'
 import { twoTruthsGame } from './twoTruths'
 
 export const GAMES: Record<string, GameConfig> = {
-  quiz: quizGame,
+  jeopardy: jeopardyGame,
   most_likely: mostLikelyGame,
   two_truths: twoTruthsGame,
 }
