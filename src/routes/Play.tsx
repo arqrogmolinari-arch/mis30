@@ -23,6 +23,7 @@ export default function Play() {
 
   if (room.active_game && room.phase === 'playing') {
     const cfg = GAMES[room.active_game]
+    if (!cfg) return <Center>Esperando el próximo juego… 🎀</Center>
     const claimed = players.filter((p) => p.claimed_at)
     return <div style={{ minHeight: '100vh' }}>{cfg.renderGuest({ room, players: claimed, answers, ttEntries, me })}</div>
   }

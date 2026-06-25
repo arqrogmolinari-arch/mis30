@@ -18,6 +18,7 @@ export default function Screen() {
 
   if (room && room.active_game && room.phase === 'playing') {
     const cfg = GAMES[room.active_game]
+    if (!cfg) return null
     return <div style={{ minHeight: '100vh' }}>{cfg.renderScreen({ room, players: claimed, answers, ttEntries })}</div>
   }
 

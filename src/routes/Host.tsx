@@ -56,6 +56,12 @@ export default function Host() {
 
   if (room.active_game) {
     const cfg = GAMES[room.active_game]
+    if (!cfg) return (
+      <div style={{ padding: 20, display: 'grid', gap: 12 }}>
+        <p style={{ color: '#5A2A4A' }}>Juego desconocido: {room.active_game}</p>
+        <PillButton onClick={() => setActiveGame(room!.id, null, {})}>Volver al hub</PillButton>
+      </div>
+    )
     const claimed = players.filter((p) => p.claimed_at)
     return (
       <div>
