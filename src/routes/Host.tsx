@@ -88,5 +88,11 @@ export default function Host() {
     )
   }
 
-  return null
+  // Inconsistent state (phase=playing but no active_game)
+  return (
+    <div style={{ padding: 20, display: 'grid', gap: 12 }}>
+      <p style={{ color: '#5A2A4A', margin: 0 }}>Estado inesperado — volvé al hub para continuar.</p>
+      <PillButton onClick={() => setPhase(room!.id, 'lobby')}>Volver al hub</PillButton>
+    </div>
+  )
 }
