@@ -15,8 +15,9 @@ const GAME_LIST: { id: GameId; title: string; emoji: string; gradient: string }[
 
 export default function Host() {
   const { code = '' } = useParams()
-  const { room, players, answers, ttEntries } = useRoom(code)
-  if (!room) return <div style={{ padding: 40 }}>Cargando…</div>
+  const { room, players, answers, ttEntries, loading } = useRoom(code)
+  if (loading) return <div style={{ padding: 40 }}>Cargando…</div>
+  if (!room) return <div style={{ padding: 40 }}>Sala no encontrada.</div>
 
   async function start(game: GameId) {
     const cfg = GAMES[game]
