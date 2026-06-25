@@ -123,14 +123,13 @@ export function SetupPanel({ ctx }: { ctx: GameContext }) {
                 const isCap = team.captain_id === mid
                 return (
                   <div key={mid} style={{ textAlign: 'center', position: 'relative' }}>
-                    <div onClick={() => setCaptain(ti, mid)} style={{ cursor: 'pointer' }}>
-                      <PlayerTile player={p} size={44} />
-                      {isCap && (
-                        <span style={{
-                          position: 'absolute', top: -4, right: -4, fontSize: 13,
-                        }}>⭐</span>
-                      )}
-                    </div>
+                    <PlayerTile player={p} size={44} onClick={() => setCaptain(ti, mid)} />
+                    {isCap && (
+                      <span style={{
+                        position: 'absolute', top: -4, right: -4, fontSize: 13,
+                        pointerEvents: 'none',
+                      }}>⭐</span>
+                    )}
                     <button
                       onClick={() => assign(mid, -1)}
                       style={{

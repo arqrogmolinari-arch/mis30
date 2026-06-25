@@ -7,11 +7,11 @@ import { GAMES } from '../games/registry'
 export default function Play() {
   const { code = '' } = useParams()
   const nav = useNavigate()
-  const { room, players, answers, ttEntries } = useRoom(code)
+  const { room, players, answers, ttEntries, loading } = useRoom(code)
   const myId = getMyPlayerId()
   const me = players.find((p) => p.id === myId)
 
-  if (!room) return <Center>Cargando…</Center>
+  if (loading || !room) return <Center>Cargando…</Center>
 
   if (!me) {
     return (
