@@ -4,12 +4,11 @@ import type { Player } from '../../lib/types'
 interface Props {
   player: Player
   size?: number  // fixed px — omit to fill the grid cell (mobile-first default)
-  dim?: boolean
   selected?: boolean
   onClick?: () => void
 }
 
-export function PlayerTile({ player, size, dim, selected, onClick }: Props) {
+export function PlayerTile({ player, size, selected, onClick }: Props) {
   const fixed = size !== undefined
   return (
     <button
