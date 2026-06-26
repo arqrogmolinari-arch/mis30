@@ -4,11 +4,12 @@ import type { Player } from '../../lib/types'
 interface Props {
   player: Player
   size?: number  // fixed px — omit to fill the grid cell (mobile-first default)
+  dim?: boolean
   selected?: boolean
   onClick?: () => void
 }
 
-export function PlayerTile({ player, size, selected, onClick }: Props) {
+export function PlayerTile({ player, size, dim, selected, onClick }: Props) {
   const fixed = size !== undefined
   return (
     <button
@@ -27,7 +28,7 @@ export function PlayerTile({ player, size, selected, onClick }: Props) {
         height: fixed ? size : undefined,
         aspectRatio: fixed ? undefined : '1 / 1',
         borderRadius: 14, position: 'relative', flexShrink: 0,
-        background: gradientFor(player.slug),
+        background: dim ? '#fff' : gradientFor(player.slug),
         boxShadow: selected
           ? '0 0 0 4px #FF4FB6, inset 0 0 0 3px rgba(255,255,255,0.8)'
           : 'inset 0 0 0 3px rgba(255,255,255,0.8), 0 4px 0 rgba(90,42,74,0.18)',
@@ -37,8 +38,15 @@ export function PlayerTile({ player, size, selected, onClick }: Props) {
           src={photoFor(player.slug)}
           alt={player.name}
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: dim ? 0.4 : 1 }}
         />
+        {dim && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: gradientFor(player.slug),
+            opacity: 0.4,
+          }} />
+        )}
       </div>
       <span style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 800, color: '#5A2A4A',
         fontSize: fixed ? 15 : 13, lineHeight: 1.2, textAlign: 'center', wordBreak: 'break-word' }}>
