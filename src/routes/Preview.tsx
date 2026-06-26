@@ -6,6 +6,8 @@
 //   /preview/podium    → podio final
 // Borrar Preview.tsx + sus rutas en App.tsx cuando no haga falta.
 import { Sparkles } from '../components/ui/Sparkles'
+import { PlayerTile } from '../components/ui/PlayerTile'
+import { roster } from '../lib/roster'
 import { WaitingRoom } from './Play'
 import { jeopardyGame, TeamPodium } from '../games/jeopardy/index'
 import { SetupPanel } from '../games/jeopardy/setup'
@@ -77,6 +79,25 @@ function Frame({ children, narrow }: { children: React.ReactNode; narrow?: boole
 
 export default function Preview() {
   const path = window.location.pathname
+
+  if (path.endsWith('/avatars')) {
+    return (
+      <Frame>
+        <h2 style={{ fontFamily: 'Pixelify Sans, sans-serif', color: '#5A2A4A', letterSpacing: 1, textAlign: 'center' }}>
+          Avatares del roster
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: 14 }}>
+          {roster.map((r) => (
+            <PlayerTile
+              key={r.slug}
+              size={90}
+              player={{ id: r.slug, room_id: 'preview', slug: r.slug, name: r.name, photo: '', claimed_at: null, score: 0 }}
+            />
+          ))}
+        </div>
+      </Frame>
+    )
+  }
 
   if (path.endsWith('/loading')) return <WaitingRoom name="Rocío" />
 

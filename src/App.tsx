@@ -26,6 +26,7 @@ export default function App() {
       <Route path="/preview/setup" element={<Preview />} />
       <Route path="/preview/jeopardy" element={<Preview />} />
       <Route path="/preview/answer" element={<Preview />} />
+      <Route path="/preview/avatars" element={<Preview />} />
       <Route path="*" element={<div>not found</div>} />
     </Routes>
   )

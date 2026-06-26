@@ -9,7 +9,7 @@ export const roster: RosterEntry[] = rosterData as RosterEntry[]
 
 /** Photo path for a slug. Falls back to a placeholder if the file is missing. */
 export function photoFor(slug: string): string {
-  return `/players/${slug}.jpg`
+  return `/players/${slug}.png`
 }
 
 /** Deterministic glam gradient per slug, used as a placeholder behind missing photos. */

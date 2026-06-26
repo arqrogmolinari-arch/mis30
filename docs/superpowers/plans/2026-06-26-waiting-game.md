@@ -1,0 +1,513 @@
+# Waiting Game Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Reemplazar la `WaitingRoom` del lobby con un mini runner (estilo dino de Chrome) donde una chica pixel art salta flores mientras espera que el host arranque.
+
+**Architecture:** Un componente autocontenido `WaitingGame` con game loop vía `requestAnimationFrame`. La física (posición, velocidad, obstáculos) vive en refs para no causar re-renders; un solo `useState` con `RenderState` se actualiza por frame (React 18 lo batchea en un render por frame). La chica y las flores son SVGs pixel art inline.
+
+**Tech Stack:** React 18, TypeScript, SVGs inline con `shapeRendering="crispEdges"`, `requestAnimationFrame`.
+
+## Global Constraints
+
+- Sin dependencias externas nuevas.
+- Todo el trabajo en la rama `feature/waiting-game` — no tocar `main`.
+- El componente original `WaitingRoom` en `Play.tsx` no se elimina, solo se reemplaza el import en esta rama.
+- Respetar la paleta Y2K girly del proyecto: `#5A2A4A` (tinta), `#FF4FB6` (rosa hot), `#FFD6B0` (piel), `#FF9ECC` (rosa vestido), `#4A2040` (pelo).
+- Fuentes: `Pixelify Sans` para puntajes y mensajes de juego, `Quicksand` para el subtítulo.
+
+---
+
+### Task 1: Crear la rama feature
+
+**Files:**
+- No se crean ni modifican archivos en este task.
+
+**Interfaces:**
+- Produces: rama `feature/waiting-game` lista para trabajar.
+
+- [ ] **Step 1: Crear y pararse en la rama**
+
+```bash
+git checkout -b feature/waiting-game
+```
+
+Expected: `Switched to a new branch 'feature/waiting-game'`
+
+- [ ] **Step 2: Verificar rama activa**
+
+```bash
+git branch --show-current
+```
+
+Expected: `feature/waiting-game`
+
+---
+
+### Task 2: Crear WaitingGame.tsx
+
+**Files:**
+- Create: `src/components/ui/WaitingGame.tsx`
+
+**Interfaces:**
+- Consumes: nada de tasks anteriores (componente autocontenido).
+- Produces: `export function WaitingGame({ name }: { name: string })` — reemplaza a `WaitingRoom`.
+
+- [ ] **Step 1: Crear el archivo con la implementación completa**
+
+Crear `src/components/ui/WaitingGame.tsx` con este contenido exacto:
+
+```tsx
+import { useEffect, useRef, useState, useCallback } from 'react'
+
+const GRAVITY = 0.6
+const JUMP_VY = 11
+const INITIAL_SPEED = 4
+const GAME_HEIGHT = 140
+const GIRL_X = 44
+const GIRL_W = 24
+const GIRL_H = 32
+const OBS_W = 16
+const OBS_H = 20
+
+type Obs = { id: number; x: number }
+
+type RS = {
+  girlY: number
+  isAirborne: boolean
+  runFrame: number
+  obstacles: Obs[]
+  score: number
+  gameOver: boolean
+  flash: boolean
+}
+
+const INIT_RS: RS = {
+  girlY: 0, isAirborne: false, runFrame: 0,
+  obstacles: [], score: 0, gameOver: false, flash: false,
+}
+
+function GirlSprite({ isAirborne, runFrame, flash }: {
+  isAirborne: boolean
+  runFrame: number
+  flash: boolean
+}) {
+  const alt = !isAirborne && runFrame === 1
+  return (
+    <svg
+      viewBox="0 0 12 16"
+      width={GIRL_W}
+      height={GIRL_H}
+      shapeRendering="crispEdges"
+      style={{
+        imageRendering: 'pixelated',
+        display: 'block',
+        filter: flash ? 'brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(290deg)' : 'none',
+      }}
+    >
+      {/* Hair */}
+      <rect x="3" y="0" width="6" height="1" fill="#4A2040" />
+      <rect x="2" y="1" width="8" height="1" fill="#4A2040" />
+      <rect x="1" y="2" width="2" height="8" fill="#4A2040" />
+      <rect x="9" y="2" width="2" height="8" fill="#4A2040" />
+      {/* Face */}
+      <rect x="3" y="2" width="6" height="6" fill="#FFD6B0" />
+      {/* Eyes */}
+      <rect x="4" y="3" width="1" height="2" fill="#2A1428" />
+      <rect x="7" y="3" width="1" height="2" fill="#2A1428" />
+      {/* Mouth */}
+      <rect x="5" y="6" width="2" height="1" fill="#CC3377" />
+      {/* Dress body */}
+      <rect x="2" y="8" width="8" height="3" fill="#FF9ECC" />
+      {/* Skirt */}
+      <rect x="1" y="11" width="10" height="1" fill="#FF9ECC" />
+      <rect x="0" y="12" width="12" height="1" fill="#FFB8DC" />
+      {/* Legs — alternate frame when running */}
+      {alt ? (
+        <>
+          <rect x="2" y="13" width="2" height="2" fill="#4A2040" />
+          <rect x="2" y="15" width="3" height="1" fill="#4A2040" />
+          <rect x="8" y="13" width="2" height="1" fill="#4A2040" />
+          <rect x="7" y="14" width="2" height="2" fill="#4A2040" />
+        </>
+      ) : (
+        <>
+          <rect x="3" y="13" width="2" height="3" fill="#4A2040" />
+          <rect x="7" y="13" width="2" height="3" fill="#4A2040" />
+        </>
+      )}
+    </svg>
+  )
+}
+
+function FlowerSprite() {
+  return (
+    <svg
+      viewBox="0 0 8 10"
+      width={OBS_W}
+      height={OBS_H}
+      shapeRendering="crispEdges"
+      style={{ imageRendering: 'pixelated', display: 'block' }}
+    >
+      {/* Top petal */}
+      <rect x="2" y="0" width="4" height="2" fill="#FF4FB6" />
+      {/* Left petal */}
+      <rect x="0" y="2" width="2" height="3" fill="#FF4FB6" />
+      {/* Right petal */}
+      <rect x="6" y="2" width="2" height="3" fill="#FF4FB6" />
+      {/* Center */}
+      <rect x="2" y="1" width="4" height="4" fill="#FFD700" />
+      {/* Stem */}
+      <rect x="3" y="6" width="2" height="4" fill="#5A9A3A" />
+    </svg>
+  )
+}
+
+export function WaitingGame({ name }: { name: string }) {
+  const [rs, setRs] = useState<RS>(INIT_RS)
+
+  const girlYRef  = useRef(0)
+  const girlVYRef = useRef(0)
+  const obsRef    = useRef<Obs[]>([])
+  const speedRef  = useRef(INITIAL_SPEED)
+  const nextRef   = useRef(80)
+  const idRef     = useRef(0)
+  const scoreRef  = useRef(0)
+  const goRef     = useRef(false)
+  const rafRef    = useRef(0)
+  const gameAreaRef = useRef<HTMLDivElement>(null)
+
+  const jump = useCallback(() => {
+    if (girlYRef.current === 0 && !goRef.current) {
+      girlVYRef.current = JUMP_VY
+    }
+  }, [])
+
+  const resetGame = useCallback(() => {
+    goRef.current   = false
+    girlYRef.current  = 0
+    girlVYRef.current = 0
+    obsRef.current    = []
+    speedRef.current  = INITIAL_SPEED
+    nextRef.current   = 80
+    idRef.current     = 0
+    scoreRef.current  = 0
+    setRs(INIT_RS)
+  }, [])
+
+  useEffect(() => {
+    const gameWidth = gameAreaRef.current?.offsetWidth ?? 420
+    let frameCount = 0
+
+    const tick = () => {
+      if (goRef.current) return
+      frameCount++
+
+      // Physics (Y increases upward, gravity pulls down)
+      girlVYRef.current -= GRAVITY
+      const newY = Math.max(0, girlYRef.current + girlVYRef.current)
+      if (newY === 0) girlVYRef.current = 0
+      girlYRef.current = newY
+      const onGround = newY === 0
+
+      // Run frame — toggle every 8 frames while on ground
+      const runFrame = onGround ? Math.floor(frameCount / 8) % 2 : 0
+
+      // Move obstacles, count cleared
+      let cleared = 0
+      const newObs: Obs[] = []
+      for (const o of obsRef.current) {
+        const nx = o.x - speedRef.current
+        if (nx < -OBS_W) { cleared++; continue }
+        newObs.push({ ...o, x: nx })
+      }
+      obsRef.current = newObs
+
+      // Update score + speed
+      let newScore = scoreRef.current
+      if (cleared > 0) {
+        newScore = scoreRef.current + cleared
+        scoreRef.current = newScore
+        if (newScore % 5 === 0) {
+          speedRef.current = Math.min(speedRef.current + 0.3, 12)
+        }
+      }
+
+      // Spawn obstacle
+      nextRef.current--
+      if (nextRef.current <= 0) {
+        obsRef.current = [...obsRef.current, { id: idRef.current++, x: gameWidth + 10 }]
+        nextRef.current = 60 + Math.floor(Math.random() * 90)
+      }
+
+      // Collision (bounding box with 4px margin)
+      const gLeft   = GIRL_X + 4
+      const gRight  = GIRL_X + GIRL_W - 4
+      const gBottom = newY
+      const gTop    = newY + GIRL_H - 4
+
+      let hit = false
+      for (const o of obsRef.current) {
+        const oLeft  = o.x + 4
+        const oRight = o.x + OBS_W - 4
+        const oTop   = OBS_H - 4
+        if (gRight > oLeft && gLeft < oRight && gBottom < oTop && gTop > 0) {
+          hit = true
+          break
+        }
+      }
+
+      if (hit) {
+        goRef.current = true
+        setRs(prev => ({ ...prev, gameOver: true, flash: true }))
+        setTimeout(() => setRs(prev => ({ ...prev, flash: false })), 400)
+        setTimeout(resetGame, 1200)
+        return
+      }
+
+      setRs({
+        girlY: newY,
+        isAirborne: !onGround,
+        runFrame,
+        obstacles: [...obsRef.current],
+        score: newScore,
+        gameOver: false,
+        flash: false,
+      })
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [resetGame])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
+        e.preventDefault()
+        jump()
+      }
+    }
+    window.addEventListener('keydown', onKey, { passive: false })
+    return () => window.removeEventListener('keydown', onKey)
+  }, [jump])
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px 16px 40px',
+        userSelect: 'none',
+      }}
+    >
+      {/* Header: nombre + score */}
+      <div
+        style={{
+          width: '100%',
+          maxWidth: 480,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'baseline',
+          marginBottom: 12,
+          fontFamily: 'Pixelify Sans, sans-serif',
+          color: '#5A2A4A',
+        }}
+      >
+        <span style={{ fontSize: 'clamp(22px, 6vw, 30px)' }}>Hola {name}!</span>
+        <span style={{ fontSize: 'clamp(18px, 5vw, 24px)' }}>{rs.score}</span>
+      </div>
+
+      {/* Área de juego */}
+      <div
+        ref={gameAreaRef}
+        onPointerDown={jump}
+        style={{
+          width: '100%',
+          maxWidth: 480,
+          height: GAME_HEIGHT,
+          position: 'relative',
+          borderBottom: '2px dashed var(--pink-hot)',
+          cursor: 'pointer',
+          overflow: 'hidden',
+          touchAction: 'none',
+        }}
+      >
+        {/* Chica */}
+        <div
+          style={{
+            position: 'absolute',
+            left: GIRL_X,
+            bottom: rs.girlY,
+            width: GIRL_W,
+            height: GIRL_H,
+          }}
+        >
+          <GirlSprite
+            isAirborne={rs.isAirborne}
+            runFrame={rs.runFrame}
+            flash={rs.flash}
+          />
+        </div>
+
+        {/* Flores obstáculo */}
+        {rs.obstacles.map(o => (
+          <div
+            key={o.id}
+            style={{
+              position: 'absolute',
+              left: o.x,
+              bottom: 0,
+              width: OBS_W,
+              height: OBS_H,
+            }}
+          >
+            <FlowerSprite />
+          </div>
+        ))}
+
+        {/* Game over */}
+        {rs.gameOver && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'Pixelify Sans, sans-serif',
+              color: '#5A2A4A',
+              fontSize: 22,
+              letterSpacing: 1,
+            }}
+          >
+            ¡Ay!
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <p
+        style={{
+          fontFamily: 'Quicksand, sans-serif',
+          fontWeight: 700,
+          color: '#5A2A4A',
+          opacity: 0.75,
+          fontSize: 'clamp(13px, 3.8vw, 16px)',
+          margin: '14px 0 4px',
+          textAlign: 'center',
+        }}
+      >
+        {rs.gameOver ? 'Reiniciando…' : 'Tocá o presioná espacio para saltar'}
+      </p>
+      <p
+        style={{
+          fontFamily: 'Quicksand, sans-serif',
+          fontWeight: 700,
+          color: '#5A2A4A',
+          opacity: 0.55,
+          fontSize: 'clamp(12px, 3.5vw, 14px)',
+          margin: 0,
+          textAlign: 'center',
+        }}
+      >
+        Esperando que comience la partida…
+      </p>
+    </div>
+  )
+}
+```
+
+- [ ] **Step 2: Verificar que no haya errores de TypeScript**
+
+```bash
+cd /Users/rogmolinari/Documents/Mis30 && npx tsc --noEmit 2>&1 | head -30
+```
+
+Expected: sin errores (0 lines de output o solo warnings).
+
+- [ ] **Step 3: Probar visualmente el componente**
+
+Arrancar el dev server y navegar a `/play/TEST` (cualquier código). La pantalla de lobby debería mostrar el juego una vez conectado. Por ahora, verificar primero en el siguiente task. Para test rápido antes de wiring, se puede importar temporalmente en `App.tsx`.
+
+- [ ] **Step 4: Commit del componente**
+
+```bash
+git add src/components/ui/WaitingGame.tsx
+git commit -m "feat: add WaitingGame pixel-art runner component"
+```
+
+---
+
+### Task 3: Wiring en Play.tsx
+
+**Files:**
+- Modify: `src/routes/Play.tsx` (solo el import y el condicional de lobby)
+
+**Interfaces:**
+- Consumes: `WaitingGame({ name: string })` de `../components/ui/WaitingGame`
+- Produces: la ruta `/play/:code` muestra el mini juego durante `phase === 'lobby'`
+
+- [ ] **Step 1: Reemplazar el import de WaitingRoom**
+
+En `src/routes/Play.tsx`, en la línea que dice:
+```tsx
+// No hay import de WaitingRoom actualmente — está definida en el mismo archivo
+```
+
+Agregar el import al inicio del archivo (después de los imports existentes):
+```tsx
+import { WaitingGame } from '../components/ui/WaitingGame'
+```
+
+- [ ] **Step 2: Reemplazar el uso de WaitingRoom en el condicional de lobby**
+
+En `src/routes/Play.tsx`, cambiar la línea:
+```tsx
+  if (room.phase === 'lobby') {
+    return <WaitingRoom name={me.name} />
+  }
+```
+
+Por:
+```tsx
+  if (room.phase === 'lobby') {
+    return <WaitingGame name={me.name} />
+  }
+```
+
+- [ ] **Step 3: Verificar TypeScript**
+
+```bash
+cd /Users/rogmolinari/Documents/Mis30 && npx tsc --noEmit 2>&1 | head -30
+```
+
+Expected: 0 errores.
+
+- [ ] **Step 4: Probar en el navegador**
+
+Arrancar el dev server:
+```bash
+npm run dev
+```
+
+1. Ir a `/join`, unirse a una sala con cualquier jugador.
+2. Mientras el host no arranca la partida (`phase === 'lobby'`), debería aparecer el mini juego.
+3. Verificar:
+   - La chica pixel art corre sobre el suelo con animación de piernas.
+   - Presionar espacio o tocar la pantalla hace que salte.
+   - Las flores aparecen desde la derecha y avanzan hacia la izquierda.
+   - Al chocar, aparece "¡Ay!" y el juego reinicia en ~1.2s.
+   - El score en la esquina superior derecha sube al esquivar flores.
+   - Cuando el host cambia de fase, el juego desaparece y aparece la pantalla del juego.
+
+- [ ] **Step 5: Commit final**
+
+```bash
+git add src/routes/Play.tsx
+git commit -m "feat: use WaitingGame in lobby phase instead of WaitingRoom"
+```
