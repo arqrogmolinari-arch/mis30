@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { useRoom } from '../lib/room'
 import { getMyPlayerId } from '../lib/identity'
 import { Sparkles } from '../components/ui/Sparkles'
@@ -26,6 +26,10 @@ export default function Play() {
         </div>
       </Center>
     )
+  }
+
+  if (me.name === 'Ro') {
+    return <Navigate to={`/host/${code}`} replace />
   }
 
   if (room.phase === 'lobby') {
