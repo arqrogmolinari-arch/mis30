@@ -1,7 +1,7 @@
 {
   "categories": [
     {
-      "name": "Arquitectura",
+      "name": "Arqui",
       "questions": [
         { "value": 100, "q": "¿Quién diseñó la Sagrada Familia?", "a": "Antoni Gaudí", "accept": ["gaudi", "gaudí", "antoni"] },
         { "value": 200, "q": "¿Qué estilo arquitectónico se caracteriza por arcos puntiagudos y vitrales?", "a": "Gótico", "accept": ["gotico", "gótico", "gotic"] },
@@ -11,7 +11,7 @@
       ]
     },
     {
-      "name": "Tecnología",
+      "name": "Tecno",
       "questions": [
         { "value": 100, "q": "¿Qué significa \"www\"?", "a": "World Wide Web", "accept": ["world wide web", "world wide", "wide web"] },
         { "value": 200, "q": "¿Qué significa \"UX\"?", "a": "User Experience (Experiencia de Usuario)", "accept": ["user experience", "experiencia de usuario", "experiencia usuario", "experiencia", "user exp"] },
@@ -21,17 +21,17 @@
       ]
     },
     {
-      "name": "Cultura Pop 2000s",
+      "name": "Cultura 2000",
       "questions": [
-        { "value": 100, "q": "¿Quién cantó \"Baby One More Time\"?", "a": "Britney Spears", "accept": ["britney", "spears"] },
-        { "value": 200, "q": "¿Cómo se llamaba la línea de muñecas rival de Barbie, furor en los 2000?", "a": "Bratz", "accept": ["bratz"] },
-        { "value": 300, "q": "¿Qué programa argentino de los 2000 lanzó al grupo Erreway?", "a": "Rebelde Way", "accept": ["rebelde", "rebelde way"] },
-        { "value": 400, "q": "¿Quién interpretó a Hannah Montana en la serie de Disney Channel?", "a": "Miley Cyrus", "accept": ["miley", "cyrus"] },
-        { "value": 500, "q": "¿Cómo se llamaba el personaje de Lindsay Lohan en \"Chica Mala\"?", "a": "Cady Heron", "accept": ["cady", "heron"] }
+        { "value": 100, "q": "¿Qué banda lanzó \"American Idiot\" en 2004?", "a": "Green Day", "accept": ["green day", "greenday"] },
+        { "value": 200, "q": "¿Qué rapero lanzó \"In Da Club\" en 2003?", "a": "50 Cent", "accept": ["50 cent", "fifty cent", "50cent", "fiddy"] },
+        { "value": 300, "q": "¿Qué película argentina de 2009 ganó el Oscar a mejor film extranjero?", "a": "El secreto de sus ojos", "accept": ["secreto de sus ojos", "el secreto", "sus ojos"] },
+        { "value": 400, "q": "¿Qué reality de competencia creó Tyra Banks?", "a": "America's Next Top Model", "accept": ["next top model", "america next top model", "antm"] },
+        { "value": 500, "q": "¿Qué actriz protagonizó \"Kill Bill\" de Tarantino?", "a": "Uma Thurman", "accept": ["uma", "thurman", "uma thurman"] }
       ]
     },
     {
-      "name": "Sobre Ro",
+      "name": "Rocio",
       "questions": [
         { "value": 100, "q": "¿Qué proteína no puede faltar en la heladera de Ro?", "a": "Suprema de pollo", "accept": ["suprema", "pollo"] },
         { "value": 200, "q": "¿Qué bebida toma Ro al menos dos veces por día?", "a": "Café con leche", "accept": ["cafe", "café", "leche", "con leche"] },
@@ -43,11 +43,11 @@
     {
       "name": "Por el mundo",
       "questions": [
-        { "value": 100, "q": "¿Cuál es la capital de Francia?", "a": "París", "accept": ["paris", "parís"] },
-        { "value": 200, "q": "¿En qué continente se encuentra Egipto?", "a": "África", "accept": ["africa", "áfrica"] },
-        { "value": 300, "q": "¿Cuál es el país más grande del mundo por superficie?", "a": "Rusia", "accept": ["rusia", "russia"] },
-        { "value": 400, "q": "¿Cómo se llama la moneda oficial de Japón?", "a": "Yen", "accept": ["yen"] },
-        { "value": 500, "q": "¿En qué país está Estambul, la ciudad que conecta Europa y Asia?", "a": "Turquía", "accept": ["turquia", "turquía", "turkey", "turca", "turco"] }
+        { "value": 100, "q": "¿Cuál es el río más largo del mundo?", "a": "Nilo", "accept": ["nilo", "rio nilo", "río nilo"] },
+        { "value": 200, "q": "¿Cuál es la capital de Australia?", "a": "Canberra", "accept": ["canberra"] },
+        { "value": 300, "q": "¿Cuál es el país más pequeño del mundo?", "a": "Ciudad del Vaticano", "accept": ["vaticano", "ciudad del vaticano", "vatican"] },
+        { "value": 400, "q": "¿Cuál es el país más densamente poblado del mundo?", "a": "Mónaco", "accept": ["monaco", "mónaco"] },
+        { "value": 500, "q": "¿Qué país tiene tres capitales?", "a": "Sudáfrica", "accept": ["sudafrica", "sudáfrica", "south africa"] }
       ]
     }
   ]

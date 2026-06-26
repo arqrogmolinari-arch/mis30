@@ -35,14 +35,16 @@ export function JeopardyBoard({
       <div style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${categories.length}, 1fr)`,
+        gridAutoRows: '1fr',
         gap: 5, padding: '0 4px',
       }}>
         {categories.map((cat, ci) => (
           <div key={ci} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
             textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif',
             fontWeight: 800, fontSize: 11, color: '#5A2A4A',
             padding: '6px 2px', background: 'rgba(255,255,255,0.6)',
-            borderRadius: 7,
+            borderRadius: 7, minHeight: 36,
           }}>
             {cat.name}
           </div>
@@ -58,7 +60,8 @@ export function JeopardyBoard({
                 disabled={!tappable}
                 onClick={() => tappable && onPick?.(ci, vi)}
                 style={{
-                  padding: '14px 2px', borderRadius: 9, border: 'none',
+                  padding: '0', height: '100%', width: '100%',
+                  borderRadius: 9, border: 'none',
                   cursor: tappable ? 'pointer' : 'default',
                   background: played
                     ? 'rgba(90,42,74,0.07)'
@@ -67,6 +70,7 @@ export function JeopardyBoard({
                   fontWeight: 800, fontSize: 18,
                   fontFamily: 'Pixelify Sans, sans-serif',
                   boxShadow: played ? 'none' : '0 3px 0 rgba(0,0,0,0.12)',
+                  minHeight: 52,
                 }}
               >
                 {played ? '' : val}

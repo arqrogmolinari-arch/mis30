@@ -11,6 +11,43 @@ import { jRoundKey, getMyTeam, isCaptain, isCorrect } from './utils'
 
 const CATEGORIES = jeopardyData.categories
 
+const HEART_CSS = `
+@keyframes pixelHeartBeat {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(0.7); opacity: 0.35; }
+}
+`
+
+function PixelHeartsLoader() {
+  const heart = (delay: number) => (
+    <svg
+      width="28" height="26" viewBox="0 0 7 6" style={{
+        imageRendering: 'pixelated',
+        animation: `pixelHeartBeat 1.2s ease-in-out ${delay}ms infinite`,
+      }}
+    >
+      {/* pixel heart shape */}
+      <rect x="1" y="0" width="2" height="1" fill="#FF4FB6"/>
+      <rect x="4" y="0" width="2" height="1" fill="#FF4FB6"/>
+      <rect x="0" y="1" width="7" height="1" fill="#FF4FB6"/>
+      <rect x="0" y="2" width="7" height="1" fill="#FF4FB6"/>
+      <rect x="1" y="3" width="5" height="1" fill="#FF4FB6"/>
+      <rect x="2" y="4" width="3" height="1" fill="#FF4FB6"/>
+      <rect x="3" y="5" width="1" height="1" fill="#FF4FB6"/>
+    </svg>
+  )
+  return (
+    <>
+      <style>{HEART_CSS}</style>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+        {heart(0)}
+        {heart(300)}
+        {heart(600)}
+      </div>
+    </>
+  )
+}
+
 export function TeamPodium({ teams }: { teams: JeopardyTeam[] }) {
   const sorted = [...teams].sort((a, b) => b.score - a.score)
   return (
@@ -190,11 +227,22 @@ export const jeopardyGame: GameConfig = {
       const ct = teams[currentTeamIdx]
       const captain = ct ? ctx.players.find((p) => p.id === ct.captain_id) : null
       return (
-        <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontSize: 18 }}>
-            Turno de <span style={{ fontWeight: 800, color: ct?.color }}>{ct?.name}</span>
+        <div style={{
+          minHeight: '100dvh', background: '#FFD6E7',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          textAlign: 'center', padding: 24, gap: 24,
+        }}>
+          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 22, fontWeight: 700, margin: 0 }}>
+            Turno del{' '}
+            <span style={{ fontWeight: 800, color: ct?.color ?? '#FF4FB6' }}>{ct?.name}</span>
           </p>
-          {captain && <p style={{ color: '#999', fontSize: 14, marginTop: 4 }}>{captain.name} está eligiendo…</p>}
+          {captain && (
+            <p style={{ color: '#A06080', fontFamily: 'Quicksand, sans-serif', fontSize: 16, margin: 0 }}>
+              {captain.name} está eligiendo…
+            </p>
+          )}
+          <PixelHeartsLoader />
         </div>
       )
     }
