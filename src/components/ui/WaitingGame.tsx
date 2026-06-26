@@ -117,16 +117,6 @@ export function WaitingGame({ name }: { name: string }) {
   const rafRef    = useRef(0)
   const gameAreaRef = useRef<HTMLDivElement>(null)
 
-  const jump = useCallback(() => {
-    if (goRef.current) {
-      resetGame()
-      return
-    }
-    if (girlYRef.current === 0) {
-      girlVYRef.current = JUMP_VY
-    }
-  }, [resetGame])
-
   const resetGame = useCallback(() => {
     goRef.current     = false
     girlYRef.current  = 0
@@ -138,6 +128,16 @@ export function WaitingGame({ name }: { name: string }) {
     scoreRef.current  = 0
     setRs(INIT_RS)
   }, [])
+
+  const jump = useCallback(() => {
+    if (goRef.current) {
+      resetGame()
+      return
+    }
+    if (girlYRef.current === 0) {
+      girlVYRef.current = JUMP_VY
+    }
+  }, [resetGame])
 
   useEffect(() => {
     const gameWidth = gameAreaRef.current?.offsetWidth ?? 420
