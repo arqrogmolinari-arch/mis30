@@ -26,7 +26,7 @@ export const twoTruthsGame: GameConfig = {
     if (gs.phase === 'writing') {
       return (
         <div style={{ padding: 32, textAlign: 'center' }}>
-          <h2 style={{ fontFamily: 'Baloo 2', fontSize: 40, color: '#5A2A4A' }}>Cargá tus 3 frases ✍️</h2>
+          <h2 style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, letterSpacing: 1, fontSize: 40, color: '#5A2A4A' }}>Cargá tus 3 frases</h2>
           <p style={{ fontSize: 28, color: '#5A2A4A' }}>{ttEntries.length} de {players.length} listos</p>
         </div>
       )
@@ -49,7 +49,7 @@ export const twoTruthsGame: GameConfig = {
                 padding: 18, borderRadius: 16, fontSize: 22, color: '#5A2A4A',
                 background: reveal && isLie ? '#FF9E5E' : 'rgba(255,255,255,0.75)',
                 boxShadow: '0 4px 0 rgba(90,42,74,0.2)',
-              }}>{entry.statements[si]}{reveal && isLie ? '  ← mentira 🤥' : ''}</div>
+              }}>{entry.statements[si]}{reveal && isLie ? '  ← mentira' : ''}</div>
             )
           })}
         </div>
@@ -63,9 +63,9 @@ export const twoTruthsGame: GameConfig = {
     const gs = room.game_state
     if (gs.phase === 'writing') return <WriteForm roomId={room.id} me={me} done={!!ttEntries.find((e) => e.player_id === me.id)} />
     const current = gs.current_player_id
-    if (current === me.id) return <div style={{ padding: 24, textAlign: 'center', fontSize: 26 }}>¡Es tu turno! Mirá la pantalla 👀</div>
+    if (current === me.id) return <div style={{ padding: 24, textAlign: 'center', fontSize: 26 }}>¡Es tu turno! Mirá la pantalla</div>
     const entry = ttEntries.find((e) => e.player_id === current)
-    if (!entry || gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla 👀</div>
+    if (!entry || gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla</div>
     const order = gs.shuffle ?? shuffleOrder(0)
     const myVote = answers.find((a) => a.round_key === roundKeyFor(current!) && a.player_id === me.id)
     return (
@@ -127,7 +127,7 @@ export const twoTruthsGame: GameConfig = {
     return (
       <div style={{ padding: 20, display: 'grid', gap: 10 }}>
         {currentPlayer && (
-          <p style={{ fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, color: '#5A2A4A', fontSize: 16, margin: 0 }}>
+          <p style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 700, color: '#5A2A4A', fontSize: 16, margin: 0 }}>
             {currentPlayer.name}
           </p>
         )}
@@ -139,7 +139,7 @@ export const twoTruthsGame: GameConfig = {
                 background: gs.phase === 'revealing' && si === currentEntry.lie_index
                   ? 'rgba(255,158,94,0.4)' : 'rgba(255,255,255,0.7)',
               }}>
-                {s}{gs.phase === 'revealing' && si === currentEntry.lie_index ? ' 🤥' : ''}
+                {s}{gs.phase === 'revealing' && si === currentEntry.lie_index ? ' · mentira' : ''}
               </div>
             ))}
           </div>
@@ -154,7 +154,7 @@ export const twoTruthsGame: GameConfig = {
 function WriteForm({ roomId, me, done }: { roomId: string; me: Player; done: boolean }) {
   const [s, setS] = useState(['', '', ''])
   const [lie, setLie] = useState<number | null>(null)
-  if (done) return <div style={{ padding: 24, textAlign: 'center', fontSize: 24 }}>¡Listo! Esperá tu turno 🎀</div>
+  if (done) return <div style={{ padding: 24, textAlign: 'center', fontSize: 24 }}>¡Listo! Esperá tu turno</div>
   const ready = s.every((x) => x.trim()) && lie !== null
   return (
     <div style={{ padding: '16px 12px 32px', display: 'grid', gap: 14 }}>
@@ -166,10 +166,11 @@ function WriteForm({ roomId, me, done }: { roomId: string; me: Player; done: boo
           }} style={{ padding: '12px 14px', borderRadius: 12, border: '2px solid #FFB6D9',
             fontSize: 16, fontFamily: 'Quicksand, sans-serif', color: '#5A2A4A' }} />
           <button onClick={() => setLie(i)} style={{
-            padding: '0 14px', borderRadius: 12, border: 'none', cursor: 'pointer', fontWeight: 700,
-            fontFamily: 'Quicksand, sans-serif', fontSize: 14, touchAction: 'manipulation',
-            background: lie === i ? '#FF4FB6' : 'rgba(255,255,255,0.7)', color: lie === i ? '#fff' : '#5A2A4A',
-          }}>🤥</button>
+            padding: '0 14px', borderRadius: 12, cursor: 'pointer', fontWeight: 700,
+            border: '2.5px solid #5A2A4A',
+            fontFamily: 'Quicksand, sans-serif', fontSize: 13, touchAction: 'manipulation',
+            background: lie === i ? '#FF4FB6' : 'rgba(255,255,255,0.85)', color: lie === i ? '#fff' : '#5A2A4A',
+          }}>Mentira</button>
         </div>
       ))}
       <PillButton disabled={!ready} style={{ width: '100%' }}

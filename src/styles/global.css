@@ -1,10 +1,60 @@
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; min-height: 100%; }
+
 body {
   font-family: var(--font-body);
+  font-weight: 600;
   color: var(--ink);
-  background: linear-gradient(135deg, #FFE4F1 0%, #FFB6D9 45%, #B86CD9 80%, #FF9E5E 100%);
-  background-attachment: fixed;
+  /* Fondo pixel-art girly: glow rosa arriba + wallpaper de corazones en pixel art. */
+  background-color: var(--loading-bg);
+  background-image:
+    radial-gradient(130% 90% at 50% -10%, rgba(255,79,182,0.30), rgba(197,139,224,0.10) 45%, transparent 70%),
+    url('/graphics/bg-hearts.svg');
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 60px 60px;
+  background-attachment: fixed, fixed;
+  image-rendering: pixelated;
 }
-h1, h2, h3 { font-family: var(--font-display); }
+
+/* Headers principales → Pixelify Sans */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Botones y resto → sans-serif */
 button { font-family: var(--font-body); }
+
+/* ---- Botón outline simple (estética 2000 girly, sin pixel art) ---- */
+.btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2.5px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+.btn:hover { box-shadow: 0 4px 0 rgba(90,42,74,0.18); }
+.btn:active { transform: translateY(2px); box-shadow: none; }
+.btn--primary { background: var(--pink-hot); color: #fff; border-color: var(--ink); }
+.btn--primary:hover { background: #ff63c0; }
+.btn--lilac { background: var(--purple-y2k); color: #fff; }
+.btn--ghost { background: rgba(255,255,255,0.85); color: var(--ink); }
+
+/* ---- Loading (fondo FAE7ED + texto Pixelify Sans) ---- */
+@keyframes pixel-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes pixel-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+.loading-dot {
+  width: 12px; height: 12px;
+  background: var(--pink-hot);
+  image-rendering: pixelated;
+  animation: pixel-blink 1s steps(2) infinite;
+}

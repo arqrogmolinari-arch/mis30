@@ -11,24 +11,28 @@ import { jRoundKey, getMyTeam, isCaptain, isCorrect } from './utils'
 
 const CATEGORIES = jeopardyData.categories
 
-function TeamPodium({ teams }: { teams: JeopardyTeam[] }) {
+export function TeamPodium({ teams }: { teams: JeopardyTeam[] }) {
   const sorted = [...teams].sort((a, b) => b.score - a.score)
   return (
     <div style={{ padding: 32, textAlign: 'center' }}>
-      <h2 style={{ fontFamily: 'Baloo 2, sans-serif', fontSize: 34, color: '#5A2A4A', margin: '0 0 20px' }}>
-        Podio final 🏆
+      <h2 style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 40, color: '#5A2A4A',
+        letterSpacing: 1, margin: '0 0 20px' }}>
+        Podio final
       </h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
         {sorted.map((t, i) => (
           <div key={t.id} style={{
-            background: 'rgba(255,255,255,0.7)', borderRadius: 14,
-            padding: '14px 20px', borderBottom: `4px solid ${t.color}`, minWidth: 90,
+            background: 'rgba(255,255,255,0.85)', borderRadius: 14, border: '2.5px solid #5A2A4A',
+            padding: '14px 20px', borderBottom: `5px solid ${t.color}`, minWidth: 90,
           }}>
-            <div style={{ fontSize: 30 }}>
-              {(['🥇', '🥈', '🥉', '4️⃣'] as const)[i]}
-            </div>
-            <div style={{ fontWeight: 800, color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 16 }}>{t.name}</div>
-            <div style={{ fontWeight: 800, color: t.color, fontSize: 26 }}>{t.score}</div>
+            <div style={{
+              width: 36, height: 36, margin: '0 auto 6px', borderRadius: '50%',
+              display: 'grid', placeItems: 'center', border: '2px solid #5A2A4A',
+              background: ['#FFD23F', '#E7D3DE', '#FFB07A', '#FFE4F1'][i] ?? '#FFE4F1',
+              fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 18, color: '#5A2A4A',
+            }}>{i + 1}</div>
+            <div style={{ fontWeight: 700, color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 16 }}>{t.name}</div>
+            <div style={{ fontWeight: 600, color: t.color, fontFamily: 'Pixelify Sans, sans-serif', fontSize: 28 }}>{t.score}</div>
           </div>
         ))}
       </div>
@@ -58,8 +62,8 @@ export const jeopardyGame: GameConfig = {
     if (phase === 'setup') {
       return (
         <div style={{ padding: 40, textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Baloo 2, sans-serif', fontSize: 28, color: '#5A2A4A' }}>
-            El host está armando los equipos… 🎪
+          <p style={{ fontFamily: 'Quicksand, sans-serif', fontSize: 28, color: '#5A2A4A' }}>
+            El host está armando los equipos…
           </p>
         </div>
       )
@@ -95,9 +99,9 @@ export const jeopardyGame: GameConfig = {
             fontSize: 13, color: '#5A2A4A', fontWeight: 700,
           }}>
             {CATEGORIES[aq.cat_i].name} · {q.value} pts
-            {phase === 'stealing' ? ' · 🔥 ROBO' : ''}
+            {phase === 'stealing' ? ' · ROBO' : ''}
           </div>
-          <p style={{ fontFamily: 'Baloo 2, sans-serif', fontSize: 32, color: '#5A2A4A', fontWeight: 800 }}>{q.q}</p>
+          <p style={{ fontFamily: 'Quicksand, sans-serif', fontSize: 32, color: '#5A2A4A', fontWeight: 800 }}>{q.q}</p>
           {gs.timer_ends_at && <Countdown endsAt={gs.timer_ends_at} />}
           <p style={{ color: '#999', fontSize: 16, marginTop: 10 }}>
             {count} respuesta{count !== 1 ? 's' : ''} recibida{count !== 1 ? 's' : ''}
@@ -139,8 +143,8 @@ export const jeopardyGame: GameConfig = {
     if (phase === 'setup' || !me) {
       return (
         <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20 }}>
-            El host está armando los equipos… 🎪
+          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20 }}>
+            El host está armando los equipos…
           </p>
         </div>
       )
@@ -149,8 +153,8 @@ export const jeopardyGame: GameConfig = {
     if (phase === 'finished') {
       return (
         <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 22, fontWeight: 800 }}>
-            ¡Terminó! Mirá la pantalla 🏆
+          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 22, fontWeight: 800 }}>
+            ¡Terminó! Mirá la pantalla
           </p>
         </div>
       )
@@ -209,11 +213,11 @@ export const jeopardyGame: GameConfig = {
     if (phase === 'revealing') {
       return (
         <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>
+          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>
           <div style={{
             background: '#5A2A4A', color: 'white', borderRadius: 12, padding: '8px 18px',
             display: 'inline-block', marginTop: 8,
-            fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800,
+            fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800,
           }}>{q.a}</div>
         </div>
       )
@@ -264,13 +268,13 @@ export const jeopardyGame: GameConfig = {
       const count = answers.filter((a) => a.round_key === rk).length
       return (
         <div style={{ padding: 16 }}>
-          <p style={{ color: '#5A2A4A', fontWeight: 800, fontFamily: 'Baloo 2, sans-serif' }}>{q.q}</p>
+          <p style={{ color: '#5A2A4A', fontWeight: 800, fontFamily: 'Quicksand, sans-serif' }}>{q.q}</p>
           <p style={{ color: '#999', fontSize: 13 }}>{count} respuesta{count !== 1 ? 's' : ''} recibida{count !== 1 ? 's' : ''}</p>
           <div style={{ display: 'grid', gap: 8, marginTop: 10 }}>
             <PillButton onClick={() => patchGameState(room.id, gs, {
               phase: 'stealing', steal_open: true,
               timer_ends_at: new Date(Date.now() + 60_000).toISOString(),
-            })}>Abrir robo 🔥</PillButton>
+            })}>Abrir robo</PillButton>
             <PillButton variant="ghost" onClick={() => patchGameState(room.id, gs, { phase: 'revealing' })}>
               Revelar
             </PillButton>
@@ -283,7 +287,7 @@ export const jeopardyGame: GameConfig = {
       const count = answers.filter((a) => a.round_key === rk).length
       return (
         <div style={{ padding: 16 }}>
-          <p style={{ color: '#FF4FB6', fontFamily: 'Baloo 2, sans-serif', fontWeight: 800 }}>🔥 Fase de robo</p>
+          <p style={{ color: '#FF4FB6', fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 18, letterSpacing: 0.5 }}>Fase de robo</p>
           <p style={{ color: '#5A2A4A', fontWeight: 800 }}>{q.q}</p>
           <p style={{ color: '#999', fontSize: 13 }}>{count} respuesta{count !== 1 ? 's' : ''} recibida{count !== 1 ? 's' : ''}</p>
           <div style={{ marginTop: 10 }}>

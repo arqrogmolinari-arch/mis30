@@ -5,9 +5,11 @@ import { claimPlayer } from '../lib/actions'
 import { setMyPlayerId } from '../lib/identity'
 import { PlayerTile } from '../components/ui/PlayerTile'
 import { Sparkles } from '../components/ui/Sparkles'
+import { Loading } from '../components/ui/Loading'
+import { DEFAULT_ROOM } from '../lib/config'
 
 export default function Join() {
-  const { code = '' } = useParams()
+  const { code = DEFAULT_ROOM } = useParams()
   const nav = useNavigate()
   const { players, loading } = useRoom(code)
   const [search, setSearch] = useState('')
@@ -17,10 +19,10 @@ export default function Join() {
     // Navega ya; el claim corre en segundo plano (Supabase puede estar frío).
     // Play encuentra al jugador por id, no depende de claimed_at.
     claimPlayer(playerId).catch((e) => console.error('claim falló', e))
-    nav(`/play/${code}`)
+    nav('/play')
   }
 
-  if (loading) return <Center>Cargando… 🎀</Center>
+  if (loading) return <Loading />
 
   const filtered = search.trim()
     ? players.filter((p) => p.name.toLowerCase().includes(search.trim().toLowerCase()))
@@ -29,10 +31,10 @@ export default function Join() {
   return (
     <div style={{ minHeight: '100vh', padding: '20px 12px 32px', position: 'relative' }}>
       <Sparkles />
-      <h1 style={{ textAlign: 'center', fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A',
-        textTransform: 'uppercase', textShadow: '2px 2px 0 rgba(255,255,255,0.6)',
-        fontSize: 'clamp(22px, 6vw, 32px)', margin: '0 0 4px' }}>¿Quién sos? 🎀</h1>
-      <p style={{ textAlign: 'center', color: '#5A2A4A', opacity: 0.8,
+      <h1 style={{ textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif', color: '#5A2A4A',
+        textShadow: '2px 2px 0 rgba(255,255,255,0.7)', letterSpacing: 1,
+        fontSize: 'clamp(28px, 8vw, 44px)', margin: '0 0 4px' }}>¿Quién sos?</h1>
+      <p style={{ textAlign: 'center', color: '#5A2A4A', opacity: 0.85,
         fontSize: 'clamp(14px, 4vw, 17px)', margin: '0 0 12px' }}>Tocá tu foto para entrar</p>
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 320, margin: '0 auto 16px' }}>
         <input
@@ -42,17 +44,13 @@ export default function Join() {
           onChange={(e) => setSearch(e.target.value)}
           style={{
             width: '100%', boxSizing: 'border-box',
-            padding: '10px 16px 10px 40px',
-            borderRadius: 999, border: '2px solid rgba(90,42,74,0.25)',
-            background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(6px)',
-            fontFamily: 'Baloo 2, sans-serif', fontSize: 15, color: '#5A2A4A',
+            padding: '11px 18px',
+            borderRadius: 999, border: '2.5px solid #5A2A4A',
+            background: 'rgba(255,255,255,0.9)',
+            fontFamily: 'Quicksand, sans-serif', fontWeight: 600, fontSize: 15, color: '#5A2A4A',
             outline: 'none',
           }}
         />
-        <span style={{
-          position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-          fontSize: 16, pointerEvents: 'none', opacity: 0.5,
-        }}>🔍</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10,
         position: 'relative', zIndex: 1 }}>
@@ -69,7 +67,3 @@ export default function Join() {
   )
 }
 
-function Center({ children }: { children: React.ReactNode }) {
-  return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center',
-    fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A', fontSize: 24 }}>{children}</div>
-}

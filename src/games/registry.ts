@@ -18,11 +18,13 @@ export interface GameConfig {
 }
 
 import { jeopardyGame } from './jeopardy/index'
-import { mostLikelyGame } from './mostLikely'
-import { twoTruthsGame } from './twoTruths'
+// Por ahora nos centramos solo en Jeopardy. Los otros dos juegos quedan
+// comentados (no borrados) para retomarlos más adelante.
+// import { mostLikelyGame } from './mostLikely'
+// import { twoTruthsGame } from './twoTruths'
 
 export const GAMES: Record<string, GameConfig> = {
   jeopardy: jeopardyGame,
-  most_likely: mostLikelyGame,
-  two_truths: twoTruthsGame,
+  // most_likely: mostLikelyGame,
+  // two_truths: twoTruthsGame,
 }

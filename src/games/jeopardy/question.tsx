@@ -22,8 +22,8 @@ export function AnsweringGuest({
   if (!isMyTurn) {
     return (
       <div style={{ padding: 24, textAlign: 'center' }}>
-        <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>
-        <p style={{ color: '#999', fontSize: 14, marginTop: 8 }}>Discutan entre el equipo 💬</p>
+        <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>
+        <p style={{ color: '#999', fontSize: 14, marginTop: 8 }}>Discutan entre el equipo</p>
         {gs.timer_ends_at && <Countdown endsAt={gs.timer_ends_at} />}
       </div>
     )
@@ -31,7 +31,7 @@ export function AnsweringGuest({
 
   return (
     <div style={{ padding: 20 }}>
-      <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{q.q}</p>
+      <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{q.q}</p>
       {gs.timer_ends_at && <Countdown endsAt={gs.timer_ends_at} />}
       <textarea
         value={text}
@@ -69,8 +69,8 @@ export function StealingGuest({
   if (!canSteal) {
     return (
       <div style={{ padding: 24, textAlign: 'center' }}>
-        <p style={{ color: '#FF4FB6', fontWeight: 800, fontSize: 18 }}>¡Fase de robo! 🔥</p>
-        <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800, marginTop: 6 }}>{q.q}</p>
+        <p style={{ color: '#FF4FB6', fontWeight: 800, fontSize: 18 }}>¡Fase de robo!</p>
+        <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800, marginTop: 6 }}>{q.q}</p>
         {gs.timer_ends_at && <Countdown endsAt={gs.timer_ends_at} />}
         <p style={{ color: '#999', fontSize: 13, marginTop: 8 }}>Los capitanes intentan robar…</p>
       </div>
@@ -79,8 +79,8 @@ export function StealingGuest({
 
   return (
     <div style={{ padding: 20 }}>
-      <p style={{ color: '#FF4FB6', fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, fontSize: 18 }}>¡Intentá robar! 🔥</p>
-      <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{q.q}</p>
+      <p style={{ color: '#FF4FB6', fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 18 }}>¡Intentá robar!</p>
+      <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{q.q}</p>
       {gs.timer_ends_at && <Countdown endsAt={gs.timer_ends_at} />}
       <textarea
         value={text}
@@ -98,7 +98,7 @@ export function StealingGuest({
           disabled={!text.trim()}
           onClick={() => me && submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())}
         >
-          ¡Robar! 🔥
+          ¡Robar!
         </PillButton>
       </div>
     </div>
@@ -119,17 +119,17 @@ export function RevealingScreen({
 
   return (
     <div style={{ padding: 24, textAlign: 'center' }}>
-      <p style={{ color: '#5A2A4A', fontFamily: 'Baloo 2, sans-serif', fontSize: 26, fontWeight: 800 }}>{q.q}</p>
+      <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 26, fontWeight: 800 }}>{q.q}</p>
       <div style={{
         background: '#5A2A4A', color: 'white', borderRadius: 14,
         padding: '10px 22px', display: 'inline-block', margin: '10px 0',
-        fontFamily: 'Baloo 2, sans-serif', fontSize: 24, fontWeight: 800,
+        fontFamily: 'Quicksand, sans-serif', fontSize: 24, fontWeight: 800,
       }}>
         {q.a}
       </div>
       {winnerTeam
-        ? <p style={{ color: winnerTeam.color, fontWeight: 800, fontSize: 20, fontFamily: 'Baloo 2, sans-serif' }}>
-            +{q.value} pts → {winnerTeam.name} 🎉
+        ? <p style={{ color: winnerTeam.color, fontWeight: 800, fontSize: 20, fontFamily: 'Quicksand, sans-serif' }}>
+            +{q.value} pts → {winnerTeam.name}
           </p>
         : <p style={{ color: '#999', fontSize: 18 }}>Nadie acertó</p>
       }
@@ -245,7 +245,7 @@ export function RevealingHost({
       </div>
       <div style={{ marginTop: 14 }}>
         <PillButton onClick={confirm} disabled={confirming}>
-          {confirming ? 'Guardando…' : isLastQuestion ? 'Ver podio final 🏆' : 'Confirmar y siguiente →'}
+          {confirming ? 'Guardando…' : isLastQuestion ? 'Ver podio final' : 'Confirmar y siguiente →'}
         </PillButton>
       </div>
     </div>

@@ -22,7 +22,7 @@ export const mostLikelyGame: GameConfig = {
     const winner = players.find((p) => p.id === winnerId)
     return (
       <div style={{ padding: 32, textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'Baloo 2', fontSize: 40, color: '#5A2A4A' }}>{PROMPTS[i]}</h2>
+        <h2 style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, letterSpacing: 1, fontSize: 40, color: '#5A2A4A' }}>{PROMPTS[i]}</h2>
         {gs.phase === 'voting'
           ? <p style={{ color: '#5A2A4A', fontSize: 24 }}>{votes.length} votos…</p>
           : winner && (
@@ -48,7 +48,7 @@ export const mostLikelyGame: GameConfig = {
     if (!me) return null
     const gs = room.game_state
     const i = gs.prompt_index ?? 0
-    if (gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla 👀</div>
+    if (gs.phase === 'revealing') return <div style={{ padding: 24, textAlign: 'center' }}>Mirá la pantalla</div>
     const myVote = answers.find((a) => a.round_key === roundKey(i) && a.player_id === me.id)
     return (
       <div style={{ padding: '0 12px 24px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
@@ -73,7 +73,7 @@ export const mostLikelyGame: GameConfig = {
     return (
       <div style={{ padding: 20, display: 'grid', gap: 12 }}>
         <p style={{ color: '#5A2A4A', margin: 0 }}>Prompt {i + 1}/{PROMPTS.length} · {gs.phase}</p>
-        <p style={{ fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, color: '#5A2A4A', fontSize: 18, margin: 0 }}>{PROMPTS[i]}</p>
+        <p style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 700, color: '#5A2A4A', fontSize: 18, margin: 0 }}>{PROMPTS[i]}</p>
         {gs.phase === 'voting' && <PillButton onClick={close}>Cerrar votación</PillButton>}
         {gs.phase === 'revealing' && !last && <PillButton onClick={next}>Siguiente</PillButton>}
         {gs.phase === 'revealing' && last && <HostBackToHub room={room} />}

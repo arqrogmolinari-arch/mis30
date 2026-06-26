@@ -4,20 +4,23 @@ import { setActiveGame, setPhase, resetScores, clearGameData } from '../lib/acti
 import { GameCard } from '../components/ui/GameCard'
 import { PillButton } from '../components/ui/PillButton'
 import { SeedPanel } from '../components/seed/SeedPanel'
+import { Loading } from '../components/ui/Loading'
 import type { GameId } from '../lib/types'
 import { GAMES } from '../games/registry'
+import { DEFAULT_ROOM } from '../lib/config'
 
-const GAME_LIST: { id: GameId; title: string; emoji: string; gradient: string }[] = [
-  { id: 'jeopardy', title: 'Jeopardy: ¿Quién conoce a Rocío?', emoji: '🎯', gradient: 'linear-gradient(135deg,#FF4FB6,#B86CD9)' },
-  { id: 'most_likely', title: '¿Quién es más probable?', emoji: '🔮', gradient: 'linear-gradient(135deg,#FF9E5E,#FF4FB6)' },
-  { id: 'two_truths', title: 'Dos verdades, una mentira', emoji: '🎭', gradient: 'linear-gradient(135deg,#B86CD9,#FFB6D9)' },
+const GAME_LIST: { id: GameId; title: string; gradient: string }[] = [
+  { id: 'jeopardy', title: 'Jeopardy: ¿Quién conoce a Rocío?', gradient: 'linear-gradient(135deg,#FF4FB6,#C58BE0)' },
+  // Por ahora solo Jeopardy. Los otros dos juegos quedan comentados para retomarlos luego.
+  // { id: 'most_likely', title: '¿Quién es más probable?', gradient: 'linear-gradient(135deg,#FF9E5E,#FF4FB6)' },
+  // { id: 'two_truths', title: 'Dos verdades, una mentira', gradient: 'linear-gradient(135deg,#C58BE0,#FFB6D9)' },
 ]
 
 export default function Host() {
-  const { code = '' } = useParams()
+  const { code = DEFAULT_ROOM } = useParams()
   const { room, players, answers, ttEntries, loading } = useRoom(code)
-  if (loading) return <div style={{ padding: 40 }}>Cargando…</div>
-  if (!room) return <div style={{ padding: 40 }}>Sala no encontrada.</div>
+  if (loading) return <Loading />
+  if (!room) return <div style={{ padding: 40, fontFamily: 'Pixelify Sans, sans-serif', color: '#5A2A4A' }}>Sala no encontrada.</div>
 
   async function start(game: GameId) {
     const cfg = GAMES[game]
@@ -38,14 +41,14 @@ export default function Host() {
   if (room.phase === 'lobby') {
     return (
       <div style={{ padding: 20, maxWidth: 520, margin: '0 auto' }}>
-        <h1 style={{ fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A' }}>Panel · {players.filter(p => p.claimed_at).length} en sala</h1>
-        <p style={{ color: '#5A2A4A' }}>Elegí un juego:</p>
+        <h1 style={{ fontFamily: 'Pixelify Sans, sans-serif', color: '#5A2A4A', letterSpacing: 1 }}>Panel · {players.filter(p => p.claimed_at).length} en sala</h1>
+        <p style={{ color: '#5A2A4A', fontWeight: 700 }}>Elegí un juego:</p>
         <div style={{ display: 'grid', gap: 14 }}>
           {GAME_LIST.map((g) => <GameCard key={g.id} {...g} onClick={() => start(g.id)} />)}
         </div>
         <SeedPanel room={room} />
         <div style={{ display: 'grid', gap: 10, marginTop: 20 }}>
-          <PillButton onClick={() => setPhase(room!.id, 'results')}>Cerrar la noche · ranking final 🏆</PillButton>
+          <PillButton onClick={() => setPhase(room!.id, 'results')}>Cerrar la noche · ranking final</PillButton>
           <PillButton variant="ghost" onClick={async () => {
             if (confirm('¿Reiniciar puntajes a 0?')) await resetScores(room!.id)
           }}>Reiniciar puntajes</PillButton>
@@ -69,16 +72,16 @@ export default function Host() {
           <button
             onClick={() => { if (confirm('¿Salir del juego actual?')) setActiveGame(room!.id, null, {}) }}
             style={{
-              background: 'transparent', border: '2px solid rgba(90,42,74,0.25)',
-              color: '#5A2A4A', borderRadius: 20, padding: '6px 16px',
+              background: '#fff', border: '2.5px solid #5A2A4A',
+              color: '#5A2A4A', borderRadius: 999, padding: '6px 18px',
               cursor: 'pointer', fontFamily: 'Quicksand, sans-serif',
               fontWeight: 700, fontSize: 13, touchAction: 'manipulation',
             }}
           >
             ← Salir
           </button>
-          <span style={{ fontFamily: 'Quicksand, sans-serif', fontWeight: 700, color: '#5A2A4A', fontSize: 13, opacity: 0.6 }}>
-            {cfg.id === 'jeopardy' ? '🎯 Jeopardy' : cfg.id === 'most_likely' ? '🔮 Más probable' : '🎭 Dos verdades'}
+          <span style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, color: '#5A2A4A', fontSize: 16, letterSpacing: 0.5 }}>
+            {cfg.id === 'jeopardy' ? 'Jeopardy' : cfg.id === 'most_likely' ? 'Más probable' : 'Dos verdades'}
           </span>
         </div>
         <div style={{ padding: 16 }}>

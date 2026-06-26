@@ -11,7 +11,7 @@ export function Countdown({ endsAt }: { endsAt: string | null | undefined }) {
   const remaining = Math.max(0, Math.ceil((new Date(endsAt).getTime() - now) / 1000))
   return (
     <div style={{
-      fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, fontSize: 48,
+      fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 48,
       color: remaining <= 5 ? '#FF4FB6' : '#5A2A4A',
     }}>{remaining}</div>
   )

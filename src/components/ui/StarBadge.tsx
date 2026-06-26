@@ -4,7 +4,7 @@ export function StarBadge({ value }: { value: number }) {
       <div style={{ fontSize: 56, lineHeight: 1, color: '#FFD23F' }}>★</div>
       <span style={{
         position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
-        justifyContent: 'center', fontFamily: 'Baloo 2, sans-serif', fontWeight: 800,
+        justifyContent: 'center', fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600,
         color: '#5A2A4A', fontSize: 20,
       }}>{value}</span>
     </div>

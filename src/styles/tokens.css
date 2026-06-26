@@ -2,10 +2,12 @@
   --pink-hot: #FF4FB6;
   --pink-bubble: #FFB6D9;
   --pink-pale: #FFE4F1;
-  --purple-y2k: #B86CD9;
+  --purple-y2k: #C58BE0;
   --orange-glow: #FF9E5E;
   --cream: #FFF6EE;
   --ink: #5A2A4A;
-  --font-display: 'Baloo 2', sans-serif;
-  --font-body: 'Quicksand', sans-serif;
+  --loading-bg: #FAE7ED;
+  /* Pixelify Sans → headers principales. Quicksand → body, botones y todo lo demás. */
+  --font-display: 'Pixelify Sans', system-ui, sans-serif;
+  --font-body: 'Quicksand', system-ui, sans-serif;
 }

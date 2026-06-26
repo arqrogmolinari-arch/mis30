@@ -24,7 +24,7 @@ export function JeopardyBoard({
     <div>
       {ct && (
         <p style={{
-          textAlign: 'center', fontFamily: 'Baloo 2, sans-serif',
+          textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif',
           fontWeight: 800, color: '#5A2A4A', fontSize: 16, margin: '0 0 10px',
         }}>
           Turno: <span style={{ color: ct.color }}>{ct.name}</span>
@@ -39,7 +39,7 @@ export function JeopardyBoard({
       }}>
         {categories.map((cat, ci) => (
           <div key={ci} style={{
-            textAlign: 'center', fontFamily: 'Baloo 2, sans-serif',
+            textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif',
             fontWeight: 800, fontSize: 11, color: '#5A2A4A',
             padding: '6px 2px', background: 'rgba(255,255,255,0.6)',
             borderRadius: 7,
@@ -65,7 +65,7 @@ export function JeopardyBoard({
                     : `linear-gradient(135deg,${ct?.color ?? '#FF4FB6'},#B86CD9)`,
                   color: played ? 'transparent' : 'white',
                   fontWeight: 800, fontSize: 18,
-                  fontFamily: 'Baloo 2, sans-serif',
+                  fontFamily: 'Pixelify Sans, sans-serif',
                   boxShadow: played ? 'none' : '0 3px 0 rgba(0,0,0,0.12)',
                 }}
               >
