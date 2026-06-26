@@ -3,6 +3,7 @@ import { useRoom } from '../lib/room'
 import { getMyPlayerId } from '../lib/identity'
 import { Sparkles } from '../components/ui/Sparkles'
 import { Loading } from '../components/ui/Loading'
+import { WaitingGame } from '../components/ui/WaitingGame'
 import { PillButton } from '../components/ui/PillButton'
 import { GAMES } from '../games/registry'
 import { DEFAULT_ROOM } from '../lib/config'
@@ -28,7 +29,7 @@ export default function Play() {
   }
 
   if (room.phase === 'lobby') {
-    return <WaitingRoom name={me.name} />
+    return <WaitingGame name={me.name} />
   }
 
   if (room.phase === 'results') {
