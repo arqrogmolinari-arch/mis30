@@ -3,21 +3,21 @@
     {
       "name": "Arquitectura",
       "questions": [
-        { "value": 100, "q": "¿En qué ciudad se encuentra la Torre Eiffel?", "a": "París", "accept": ["paris", "parís"] },
-        { "value": 200, "q": "¿Cómo se llama el edificio más alto del mundo?", "a": "Burj Khalifa", "accept": ["burj", "khalifa"] },
-        { "value": 300, "q": "¿Qué arquitecto diseñó la Sagrada Familia en Barcelona?", "a": "Antoni Gaudí", "accept": ["gaudi", "gaudí"] },
-        { "value": 400, "q": "¿En qué país se encuentra la ciudadela inca de Machu Picchu?", "a": "Perú", "accept": ["peru", "perú"] },
-        { "value": 500, "q": "¿Cómo se llama el estilo medieval con arcos apuntados, rosetones y arbotantes?", "a": "Gótico", "accept": ["gotico", "gótico"] }
+        { "value": 100, "q": "¿Quién diseñó la Sagrada Familia?", "a": "Antoni Gaudí", "accept": ["gaudi", "gaudí", "antoni gaudi", "antoni gaudí"] },
+        { "value": 200, "q": "¿Qué estilo arquitectónico se caracteriza por arcos puntiagudos y vitrales?", "a": "Gótico", "accept": ["gotico", "gótico"] },
+        { "value": 300, "q": "¿Qué edificio de Roma tiene el óculo abierto más grande de la antigüedad y una cúpula perfecta?", "a": "Panteón", "accept": ["panteon", "panteón", "pantheon"] },
+        { "value": 400, "q": "¿Qué arquitecta iraquí-británica es famosa por sus formas curvas y fluidas?", "a": "Zaha Hadid", "accept": ["zaha", "hadid", "zaha hadid"] },
+        { "value": 500, "q": "¿Qué movimiento de los años 60-70 se caracterizó por hormigón visto y formas pesadas?", "a": "Brutalismo", "accept": ["brutalismo", "brutalista"] }
       ]
     },
     {
       "name": "Tecnología",
       "questions": [
-        { "value": 100, "q": "¿Qué empresa creó el iPhone?", "a": "Apple", "accept": ["apple"] },
-        { "value": 200, "q": "¿En qué año se lanzó Facebook al público?", "a": "2004", "accept": ["2004"] },
-        { "value": 300, "q": "¿Qué significa la sigla GPS?", "a": "Global Positioning System", "accept": ["global positioning", "posicionamiento global", "positioning system"] },
-        { "value": 400, "q": "¿Cómo se llama el asistente de voz virtual de Apple?", "a": "Siri", "accept": ["siri"] },
-        { "value": 500, "q": "¿Qué lenguaje de programación creó Guido van Rossum?", "a": "Python", "accept": ["python"] }
+        { "value": 100, "q": "¿Qué significa \"www\"?", "a": "World Wide Web", "accept": ["world wide web", "www"] },
+        { "value": 200, "q": "¿Qué significa \"UX\"?", "a": "User Experience (Experiencia de Usuario)", "accept": ["user experience", "experiencia de usuario", "experiencia usuario"] },
+        { "value": 300, "q": "¿Qué significa \"MVP\" en producto digital?", "a": "Minimum Viable Product (Mínimo Producto Viable)", "accept": ["minimum viable product", "minimo producto viable", "mínimo producto viable"] },
+        { "value": 400, "q": "¿Qué protocolo conecta asistentes de IA con herramientas externas?", "a": "MCP", "accept": ["mcp"] },
+        { "value": 500, "q": "¿Qué término describe construir software escribiendo prompts en lugar de código manual?", "a": "Vibe Coding", "accept": ["vibe coding", "vibecoding"] }
       ]
     },
     {

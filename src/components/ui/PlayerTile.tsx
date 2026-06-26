@@ -17,7 +17,7 @@ export function PlayerTile({ player, size, dim, selected, onClick }: Props) {
       disabled={!onClick}
       style={{
         border: 'none', background: 'transparent', cursor: onClick ? 'pointer' : 'default',
-        opacity: dim ? 0.4 : 1, display: 'flex', flexDirection: 'column',
+        opacity: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', gap: 5, padding: 0,
         width: fixed ? size : '100%',
         touchAction: 'manipulation',
