@@ -140,7 +140,10 @@ export function WaitingGame({ name }: { name: string }) {
     let frameCount = 0
 
     const tick = () => {
-      if (goRef.current) return
+      if (goRef.current) {
+        rafRef.current = requestAnimationFrame(tick)
+        return
+      }
       frameCount++
 
       // Physics (Y increases upward, gravity pulls down)
@@ -202,6 +205,7 @@ export function WaitingGame({ name }: { name: string }) {
         setRs(prev => ({ ...prev, gameOver: true, flash: true }))
         setTimeout(() => setRs(prev => ({ ...prev, flash: false })), 400)
         setTimeout(resetGame, 1200)
+        rafRef.current = requestAnimationFrame(tick)
         return
       }
 
