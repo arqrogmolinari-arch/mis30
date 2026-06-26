@@ -55,7 +55,7 @@ export default function Join() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10,
         position: 'relative', zIndex: 1 }}>
         {filtered.map((p) => (
-          <PlayerTile key={p.id} player={p} dim={!!p.claimed_at} onClick={() => pick(p.id)} />
+          <PlayerTile key={p.id} player={p} onClick={() => pick(p.id)} />
         ))}
       </div>
       {players.length === 0 && (
