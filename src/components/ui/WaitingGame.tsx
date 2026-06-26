@@ -238,14 +238,12 @@ export function WaitingGame({ name }: { name: string }) {
   }, [jump])
 
   useEffect(() => {
-    const el = gameAreaRef.current
-    if (!el) return
     const onTouch = (e: TouchEvent) => {
       e.preventDefault()
       jump()
     }
-    el.addEventListener('touchstart', onTouch, { passive: false })
-    return () => el.removeEventListener('touchstart', onTouch)
+    document.addEventListener('touchstart', onTouch, { passive: false })
+    return () => document.removeEventListener('touchstart', onTouch)
   }, [jump])
 
   return (
