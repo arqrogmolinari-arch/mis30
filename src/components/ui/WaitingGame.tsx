@@ -118,10 +118,14 @@ export function WaitingGame({ name }: { name: string }) {
   const gameAreaRef = useRef<HTMLDivElement>(null)
 
   const jump = useCallback(() => {
-    if (girlYRef.current === 0 && !goRef.current) {
+    if (goRef.current) {
+      resetGame()
+      return
+    }
+    if (girlYRef.current === 0) {
       girlVYRef.current = JUMP_VY
     }
-  }, [])
+  }, [resetGame])
 
   const resetGame = useCallback(() => {
     goRef.current     = false
@@ -204,7 +208,6 @@ export function WaitingGame({ name }: { name: string }) {
         goRef.current = true
         setRs(prev => ({ ...prev, gameOver: true, flash: true }))
         setTimeout(() => setRs(prev => ({ ...prev, flash: false })), 400)
-        setTimeout(resetGame, 1200)
         rafRef.current = requestAnimationFrame(tick)
         return
       }
@@ -284,7 +287,7 @@ export function WaitingGame({ name }: { name: string }) {
           maxWidth: 480,
           height: GAME_HEIGHT,
           position: 'relative',
-          borderBottom: '2px dashed var(--pink-hot)',
+          borderBottom: '2px solid var(--pink-hot)',
           cursor: 'pointer',
           overflow: 'hidden',
           touchAction: 'none',
@@ -355,7 +358,7 @@ export function WaitingGame({ name }: { name: string }) {
           textAlign: 'center',
         }}
       >
-        {rs.gameOver ? 'Reiniciando…' : 'Tocá o presioná espacio para saltar'}
+        {rs.gameOver ? 'Tocá para reiniciar' : 'Tocá para saltar'}
       </p>
       <p
         style={{
