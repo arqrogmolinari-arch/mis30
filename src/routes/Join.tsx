@@ -12,9 +12,11 @@ export default function Join() {
   const { players, loading } = useRoom(code)
   const [search, setSearch] = useState('')
 
-  async function pick(playerId: string) {
+  function pick(playerId: string) {
     setMyPlayerId(playerId)
-    await claimPlayer(playerId)
+    // Navega ya; el claim corre en segundo plano (Supabase puede estar frío).
+    // Play encuentra al jugador por id, no depende de claimed_at.
+    claimPlayer(playerId).catch((e) => console.error('claim falló', e))
     nav(`/play/${code}`)
   }
 

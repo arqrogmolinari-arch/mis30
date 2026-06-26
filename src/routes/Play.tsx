@@ -35,7 +35,7 @@ export default function Play() {
   }
 
   if (room.phase === 'lobby') {
-    return <Center>Hola {me.name} 💖<br />Esperando que arranque el juego…</Center>
+    return <WaitingRoom name={me.name} />
   }
 
   if (room.phase === 'results') {
@@ -51,6 +51,57 @@ export default function Play() {
 
   // Inconsistent state (phase=playing but no active_game)
   return <Center>Esperando el próximo juego… 🎀</Center>
+}
+
+const WAITING_GAMES = [
+  { id: 'jeopardy', title: 'Jeopardy: ¿Quién conoce a Rocío?', emoji: '🎯', gradient: 'linear-gradient(135deg,#FF4FB6,#B86CD9)' },
+  { id: 'most_likely', title: '¿Quién es más probable?', emoji: '🔮', gradient: 'linear-gradient(135deg,#FF9E5E,#FF4FB6)' },
+  { id: 'two_truths', title: 'Dos verdades, una mentira', emoji: '🎭', gradient: 'linear-gradient(135deg,#B86CD9,#FFB6D9)' },
+]
+
+function WaitingRoom({ name }: { name: string }) {
+  return (
+    <div style={{ minHeight: '100vh', padding: '24px 14px 40px', position: 'relative' }}>
+      <Sparkles />
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 480, margin: '0 auto' }}>
+        <h1 style={{ textAlign: 'center', fontFamily: 'Baloo 2, sans-serif', color: '#5A2A4A',
+          textShadow: '2px 2px 0 rgba(255,255,255,0.6)',
+          fontSize: 'clamp(22px, 6vw, 30px)', margin: '0 0 2px' }}>Hola {name} 💖</h1>
+        <p style={{ textAlign: 'center', color: '#5A2A4A', opacity: 0.85,
+          fontFamily: 'Baloo 2, sans-serif', fontSize: 'clamp(14px, 4vw, 17px)', margin: '0 0 20px' }}>
+          Sala de espera · Ro va a abrir un juego 🔓
+        </p>
+        <div style={{ display: 'grid', gap: 14 }}>
+          {WAITING_GAMES.map((g) => (
+            <div key={g.id} style={{ position: 'relative' }}>
+              <div style={{
+                borderRadius: 24, background: g.gradient, padding: '24px 20px', minHeight: 150,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 10, boxShadow: 'inset 0 0 0 4px rgba(255,255,255,0.5)',
+                filter: 'grayscale(0.4)', opacity: 0.7,
+              }}>
+                <div style={{ fontSize: 52, filter: 'blur(0.4px)' }}>{g.emoji}</div>
+                <div style={{
+                  fontFamily: 'Baloo 2, sans-serif', fontWeight: 800, fontSize: 18, color: '#fff',
+                  textTransform: 'uppercase', textShadow: '2px 2px 0 rgba(90,42,74,0.35)', textAlign: 'center',
+                }}>{g.title}</div>
+              </div>
+              <div style={{
+                position: 'absolute', inset: 0, display: 'grid', placeItems: 'center',
+                background: 'rgba(90,42,74,0.18)', borderRadius: 24, backdropFilter: 'blur(1px)',
+              }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.92)', borderRadius: 999, width: 56, height: 56,
+                  display: 'grid', placeItems: 'center', fontSize: 28,
+                  boxShadow: '0 4px 0 rgba(90,42,74,0.2)',
+                }}>🔒</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function Center({ children }: { children: React.ReactNode }) {

@@ -42,7 +42,8 @@ export function useRoom(code: string): RoomState {
     }
     async function loadAnswers() {
       if (!roomId) return
-      const { data } = await supabase.from('answers').select('*').eq('room_id', roomId)
+      const { data } = await supabase.from('answers').select('*')
+        .eq('room_id', roomId).order('created_at')
       if (!cancelled && data) setAnswers(data as Answer[])
     }
     async function loadTt() {
