@@ -46,15 +46,15 @@ function GirlSprite({ isAirborne, runFrame, flash }: {
       }}
     >
       {/* Hair */}
-      <rect x="3" y="0" width="6" height="1" fill="#4A2040" />
-      <rect x="2" y="1" width="8" height="1" fill="#4A2040" />
-      <rect x="1" y="2" width="2" height="8" fill="#4A2040" />
-      <rect x="9" y="2" width="2" height="8" fill="#4A2040" />
+      <rect x="3" y="0" width="6" height="1" fill="#E8C44A" />
+      <rect x="2" y="1" width="8" height="1" fill="#E8C44A" />
+      <rect x="1" y="2" width="2" height="8" fill="#D4A832" />
+      <rect x="9" y="2" width="2" height="8" fill="#D4A832" />
       {/* Face */}
       <rect x="3" y="2" width="6" height="6" fill="#FFD6B0" />
       {/* Eyes */}
-      <rect x="4" y="3" width="1" height="2" fill="#2A1428" />
-      <rect x="7" y="3" width="1" height="2" fill="#2A1428" />
+      <rect x="4" y="3" width="1" height="2" fill="#3A2050" />
+      <rect x="7" y="3" width="1" height="2" fill="#3A2050" />
       {/* Mouth */}
       <rect x="5" y="6" width="2" height="1" fill="#CC3377" />
       {/* Dress body */}
@@ -65,15 +65,15 @@ function GirlSprite({ isAirborne, runFrame, flash }: {
       {/* Legs — alternate frame when running */}
       {alt ? (
         <>
-          <rect x="2" y="13" width="2" height="2" fill="#4A2040" />
-          <rect x="2" y="15" width="3" height="1" fill="#4A2040" />
-          <rect x="8" y="13" width="2" height="1" fill="#4A2040" />
-          <rect x="7" y="14" width="2" height="2" fill="#4A2040" />
+          <rect x="2" y="13" width="2" height="2" fill="#5A3A6A" />
+          <rect x="2" y="15" width="3" height="1" fill="#5A3A6A" />
+          <rect x="8" y="13" width="2" height="1" fill="#5A3A6A" />
+          <rect x="7" y="14" width="2" height="2" fill="#5A3A6A" />
         </>
       ) : (
         <>
-          <rect x="3" y="13" width="2" height="3" fill="#4A2040" />
-          <rect x="7" y="13" width="2" height="3" fill="#4A2040" />
+          <rect x="3" y="13" width="2" height="3" fill="#5A3A6A" />
+          <rect x="7" y="13" width="2" height="3" fill="#5A3A6A" />
         </>
       )}
     </svg>
