@@ -262,16 +262,17 @@ export default function Presenter() {
     return null
   })()
 
+  const showBand = gs.phase !== 'finished'
   return (
     <div style={{
       width: '100vw', height: '100vh',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
     }}>
-      <div style={{ flex: 1, overflow: 'hidden', paddingBottom: BAND_H }}>
+      <div style={{ flex: 1, overflow: 'hidden', paddingBottom: showBand ? BAND_H : 0 }}>
         {mainContent}
       </div>
-      <ScoreBand teams={teams} currentTeamIndex={gs.current_team_index} />
+      {showBand && <ScoreBand teams={teams} currentTeamIndex={gs.current_team_index} />}
     </div>
   )
 }

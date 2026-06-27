@@ -51,28 +51,59 @@ function PixelHeartsLoader() {
   )
 }
 
+function PixelTrophy({ size = 48 }: { size?: number }) {
+  const G = '#FFD23F'
+  const r = (x: number, y: number, c = G) => <rect key={`${x},${y}`} x={x} y={y} width={1} height={1} fill={c} />
+  return (
+    <svg width={size} height={Math.round(size * 10 / 9)} viewBox="0 0 9 10" style={{ imageRendering: 'pixelated', display: 'block' }}>
+      {[0, 1].flatMap(y => [1, 2, 3, 4, 5, 6, 7].map(x => r(x, y)))}
+      {[2, 3].flatMap(y => [0, 1, 3, 4, 5, 7, 8].map(x => r(x, y)))}
+      {[1, 2, 3, 4, 5, 6, 7].map(x => r(x, 4))}
+      {[2, 3, 4, 5, 6].map(x => r(x, 5))}
+      {[6, 7].flatMap(y => [3, 4, 5].map(x => r(x, y)))}
+      {[8, 9].flatMap(y => [1, 2, 3, 4, 5, 6, 7].map(x => r(x, y)))}
+    </svg>
+  )
+}
+
 export function TeamPodium({ teams }: { teams: JeopardyTeam[] }) {
   const sorted = [...teams].sort((a, b) => b.score - a.score)
+  const BADGE_BG = ['#E7D3DE', '#FFB07A', '#FFE4F1']
   return (
-    <div style={{ padding: 32, textAlign: 'center' }}>
-      <h2 style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 40, color: '#5A2A4A',
-        letterSpacing: 1, margin: '0 0 20px' }}>
+    <div style={{ padding: '24px 32px' }}>
+      <h2 style={{
+        fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 40,
+        color: '#5A2A4A', letterSpacing: 1, margin: '0 0 20px', textAlign: 'center',
+      }}>
         Podio final
       </h2>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520, margin: '0 auto' }}>
         {sorted.map((t, i) => (
           <div key={t.id} style={{
-            background: 'rgba(255,255,255,0.85)', borderRadius: 14, border: '2.5px solid #5A2A4A',
-            padding: '14px 20px', borderBottom: `5px solid ${t.color}`, minWidth: 90,
+            display: 'flex', alignItems: 'center', gap: 16,
+            background: 'rgba(255,255,255,0.85)', borderRadius: 14,
+            border: '2.5px solid #5A2A4A', borderLeft: `7px solid ${t.color}`,
+            padding: '12px 20px',
           }}>
-            <div style={{
-              width: 36, height: 36, margin: '0 auto 6px', borderRadius: '50%',
-              display: 'grid', placeItems: 'center', border: '2px solid #5A2A4A',
-              background: ['#FFD23F', '#E7D3DE', '#FFB07A', '#FFE4F1'][i] ?? '#FFE4F1',
-              fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 18, color: '#5A2A4A',
-            }}>{i + 1}</div>
-            <div style={{ fontWeight: 700, color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 16 }}>{t.name}</div>
-            <div style={{ fontWeight: 600, color: t.color, fontFamily: 'Pixelify Sans, sans-serif', fontSize: 28 }}>{t.score}</div>
+            <div style={{ flexShrink: 0, width: 44, display: 'flex', justifyContent: 'center' }}>
+              {i === 0
+                ? <PixelTrophy size={44} />
+                : (
+                  <div style={{
+                    width: 36, height: 36, borderRadius: '50%',
+                    display: 'grid', placeItems: 'center', border: '2px solid #5A2A4A',
+                    background: BADGE_BG[i - 1] ?? '#FFE4F1',
+                    fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, fontSize: 18, color: '#5A2A4A',
+                  }}>{i + 1}</div>
+                )
+              }
+            </div>
+            <div style={{ flex: 1, fontWeight: 700, color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20 }}>
+              {t.name}
+            </div>
+            <div style={{ fontWeight: 600, color: t.color, fontFamily: 'Pixelify Sans, sans-serif', fontSize: 36, lineHeight: 1 }}>
+              {t.score}
+            </div>
           </div>
         ))}
       </div>
