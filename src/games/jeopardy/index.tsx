@@ -358,10 +358,11 @@ export const jeopardyGame: GameConfig = {
     const ct = teams[currentTeamIdx]
 
     if (phase === 'picking') {
+      const captainName = players.find((p) => p.id === ct?.captain_id)?.name ?? 'el capitán'
       return (
         <div style={{ padding: 16 }}>
           <p style={{ color: '#5A2A4A', fontSize: 14, marginBottom: 8 }}>
-            Turno de <strong style={{ color: ct?.color }}>{ct?.name}</strong> — esperando que el capitán elija
+            Turno de <strong style={{ color: ct?.color }}>{ct?.name}</strong>. Esperando que <strong>{captainName}</strong> elija
           </p>
           <JeopardyBoard categories={CATEGORIES} board={board} teams={teams} currentTeamIndex={currentTeamIdx} />
         </div>
