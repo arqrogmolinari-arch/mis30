@@ -4,6 +4,7 @@ import Screen from './routes/Screen'
 import Host from './routes/Host'
 import Play from './routes/Play'
 import Preview from './routes/Preview'
+import Presenter from './routes/Presenter'
 
 export default function App() {
   return (
@@ -14,11 +15,13 @@ export default function App() {
       <Route path="/play" element={<Play />} />
       <Route path="/screen" element={<Screen />} />
       <Route path="/host" element={<Host />} />
+      <Route path="/presenter" element={<Presenter />} />
       {/* Compatibilidad con QR/links que llevan el código */}
       <Route path="/join/:code" element={<Join />} />
       <Route path="/play/:code" element={<Play />} />
       <Route path="/screen/:code" element={<Screen />} />
       <Route path="/host/:code" element={<Host />} />
+      <Route path="/presenter/:code" element={<Presenter />} />
       {/* Preview TEMPORAL de diseño (borrar luego) */}
       <Route path="/preview/podium" element={<Preview />} />
       <Route path="/preview/loading" element={<Preview />} />

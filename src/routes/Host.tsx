@@ -46,6 +46,21 @@ export default function Host() {
         <div style={{ display: 'grid', gap: 14 }}>
           {GAME_LIST.map((g) => <GameCard key={g.id} {...g} onClick={() => start(g.id)} />)}
         </div>
+        <a
+          href="/presenter"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block', textAlign: 'center', marginTop: 20,
+            padding: '13px 24px', borderRadius: 999,
+            border: '2.5px solid #5A2A4A',
+            color: '#5A2A4A', background: 'rgba(255,255,255,0.85)',
+            fontFamily: 'Quicksand, sans-serif', fontWeight: 700,
+            fontSize: 16, textDecoration: 'none',
+          }}
+        >
+          Presentar 📺
+        </a>
         <SeedPanel room={room} />
         <div style={{ display: 'grid', gap: 10, marginTop: 20 }}>
           <PillButton onClick={() => setPhase(room!.id, 'results')}>Cerrar la noche · ranking final</PillButton>
@@ -83,6 +98,21 @@ export default function Host() {
           <span style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, color: '#5A2A4A', fontSize: 16, letterSpacing: 0.5 }}>
             {cfg.id === 'jeopardy' ? 'Jeopardy' : cfg.id === 'most_likely' ? 'Más probable' : 'Dos verdades'}
           </span>
+          <a
+            href="/presenter"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              marginLeft: 'auto',
+              background: 'rgba(255,255,255,0.85)', border: '2.5px solid #5A2A4A',
+              color: '#5A2A4A', borderRadius: 999, padding: '6px 18px',
+              fontFamily: 'Quicksand, sans-serif', fontWeight: 700,
+              fontSize: 13, textDecoration: 'none',
+              display: 'inline-flex', alignItems: 'center',
+            }}
+          >
+            Presentar 📺
+          </a>
         </div>
         <div style={{ padding: 16 }}>
           {cfg.renderHost({ room, players: claimed, answers, ttEntries })}
