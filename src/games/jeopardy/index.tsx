@@ -282,7 +282,7 @@ export const jeopardyGame: GameConfig = {
 
   // ── HOST ────────────────────────────────────────────────────────────────────
   renderHost: (ctx) => {
-    const { room, answers } = ctx
+    const { room, answers, players } = ctx
     const gs = room.game_state
     const teams: JeopardyTeam[] = room.teams ?? []
     const phase = gs.phase
@@ -320,19 +320,80 @@ export const jeopardyGame: GameConfig = {
     const rk = jRoundKey(aq.cat_i, aq.val_i)
 
     if (phase === 'answering') {
-      const count = answers.filter((a) => a.round_key === rk).length
+      const roundAnswers = answers.filter((a) => a.round_key === rk)
+      const overrides = (gs.overrides ?? {}) as Record<string, 'correct' | 'incorrect'>
+      const allMarked = roundAnswers.length === 0 || roundAnswers.every((a) => overrides[a.player_id] != null)
+
       return (
         <div style={{ padding: 16 }}>
-          <p style={{ color: '#5A2A4A', fontWeight: 800, fontFamily: 'Quicksand, sans-serif' }}>{q.q}</p>
-          <p style={{ color: '#999', fontSize: 13 }}>{count} respuesta{count !== 1 ? 's' : ''} recibida{count !== 1 ? 's' : ''}</p>
-          <div style={{ display: 'grid', gap: 8, marginTop: 10 }}>
-            <PillButton onClick={() => patchGameState(room.id, gs, {
+          <p style={{ color: '#5A2A4A', fontWeight: 800, fontFamily: 'Quicksand, sans-serif', fontSize: 14, marginBottom: 10 }}>{q.q}</p>
+
+          {roundAnswers.length === 0 ? (
+            <p style={{ color: '#999', fontSize: 13 }}>Esperando respuesta del capitán…</p>
+          ) : (
+            <div style={{ marginBottom: 12 }}>
+              {roundAnswers.map((ans) => {
+                const player = players.find((p) => p.id === ans.player_id)
+                const mark = overrides[ans.player_id]
+                return (
+                  <div key={ans.id} style={{
+                    background: 'rgba(255,255,255,0.85)', borderRadius: 14, padding: '14px 16px',
+                    marginBottom: 8,
+                    border: `2.5px solid ${mark === 'correct' ? '#22c55e' : mark === 'incorrect' ? '#ef4444' : '#B86CD9'}`,
+                  }}>
+                    <div style={{ fontSize: 11, color: '#A06080', marginBottom: 6, fontFamily: 'Quicksand, sans-serif' }}>
+                      {player?.name ?? '?'}
+                    </div>
+                    <div style={{
+                      fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 28,
+                      color: '#5A2A4A', marginBottom: 12, lineHeight: 1.2,
+                    }}>
+                      {String(ans.value)}
+                    </div>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={() => patchGameState(room.id, gs, { overrides: { ...overrides, [ans.player_id]: 'correct' } })}
+                        style={{
+                          flex: 1, padding: '9px 0', borderRadius: 10, border: '2px solid',
+                          borderColor: mark === 'correct' ? '#22c55e' : '#ddd',
+                          background: mark === 'correct' ? 'rgba(34,197,94,0.18)' : 'transparent',
+                          cursor: 'pointer', fontSize: 15, fontWeight: 700, color: '#22c55e',
+                          fontFamily: 'Quicksand, sans-serif',
+                        }}
+                      >✓ Correcta</button>
+                      <button
+                        onClick={() => patchGameState(room.id, gs, { overrides: { ...overrides, [ans.player_id]: 'incorrect' } })}
+                        style={{
+                          flex: 1, padding: '9px 0', borderRadius: 10, border: '2px solid',
+                          borderColor: mark === 'incorrect' ? '#ef4444' : '#ddd',
+                          background: mark === 'incorrect' ? 'rgba(239,68,68,0.15)' : 'transparent',
+                          cursor: 'pointer', fontSize: 15, fontWeight: 700, color: '#ef4444',
+                          fontFamily: 'Quicksand, sans-serif',
+                        }}
+                      >✗ Incorrecta</button>
+                    </div>
+                  </div>
+                )
+              })}
+              {!allMarked && (
+                <p style={{ color: '#A06080', fontSize: 12, textAlign: 'center', margin: '0 0 8px' }}>
+                  Marcá la respuesta antes de revelar
+                </p>
+              )}
+            </div>
+          )}
+
+          <div style={{ display: 'grid', gap: 8 }}>
+            <PillButton
+              disabled={!allMarked}
+              onClick={() => patchGameState(room.id, gs, { phase: 'revealing' })}
+            >
+              Revelar
+            </PillButton>
+            <PillButton variant="ghost" onClick={() => patchGameState(room.id, gs, {
               phase: 'stealing', steal_open: true,
               timer_ends_at: new Date(Date.now() + 60_000).toISOString(),
             })}>Abrir robo</PillButton>
-            <PillButton variant="ghost" onClick={() => patchGameState(room.id, gs, { phase: 'revealing' })}>
-              Revelar
-            </PillButton>
           </div>
         </div>
       )

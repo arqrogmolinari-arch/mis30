@@ -6,12 +6,15 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /** Botón simple con outline stroke (sin pixel art). Texto en sans-serif. */
-export function PillButton({ variant = 'primary', selected, style, ...rest }: Props) {
+export function PillButton({ variant = 'primary', selected, disabled, style, ...rest }: Props) {
   return (
     <button
       {...rest}
+      disabled={disabled}
       style={{
-        cursor: 'pointer', fontFamily: 'Quicksand, sans-serif',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.45 : 1,
+        fontFamily: 'Quicksand, sans-serif',
         fontWeight: 700, letterSpacing: '0.3px',
         fontSize: 16, padding: '13px 24px', borderRadius: 999,
         border: '2.5px solid #5A2A4A',
