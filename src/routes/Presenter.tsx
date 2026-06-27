@@ -19,8 +19,8 @@ function ScoreBand({ teams, currentTeamIndex }: { teams: JeopardyTeam[]; current
     <div style={{
       position: 'fixed', bottom: 0, left: 0, right: 0,
       height: BAND_H,
-      background: 'rgba(0,0,0,0.60)',
-      borderTop: '2px solid rgba(255,255,255,0.08)',
+      background: 'rgba(255,255,255,0.85)',
+      borderTop: '2px solid rgba(90,42,74,0.12)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       gap: 40, padding: '0 48px',
     }}>
@@ -31,11 +31,11 @@ function ScoreBand({ teams, currentTeamIndex }: { teams: JeopardyTeam[]; current
             display: 'flex', flexDirection: 'column', alignItems: 'center',
             padding: '6px 28px', borderRadius: 14,
             border: active ? `3px solid ${t.color}` : '3px solid transparent',
-            boxShadow: active ? `0 0 24px ${t.color}55` : 'none',
+            boxShadow: active ? `0 0 20px ${t.color}55` : 'none',
             transition: 'box-shadow 0.3s ease',
           }}>
             <div style={{
-              color: 'rgba(255,255,255,0.75)',
+              color: '#5A2A4A',
               fontFamily: 'Quicksand, sans-serif', fontWeight: 700, fontSize: 22,
             }}>
               {t.name}
@@ -69,7 +69,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
     return (
       <div style={centered}>
         <p style={{
-          color: '#FFD6E7', fontFamily: 'Pixelify Sans, sans-serif',
+          color: '#5A2A4A', fontFamily: 'Pixelify Sans, sans-serif',
           fontSize: 'clamp(32px,4vw,56px)', fontWeight: 600, margin: 0,
         }}>
           Preparando el juego…
@@ -108,9 +108,10 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
     return (
       <div style={centered}>
         <div style={{
-          background: phase === 'stealing' ? '#FF4FB6' : 'rgba(255,255,255,0.12)',
-          color: phase === 'stealing' ? '#fff' : 'rgba(255,255,255,0.8)',
+          background: phase === 'stealing' ? '#FF4FB6' : 'rgba(255,255,255,0.7)',
+          color: phase === 'stealing' ? '#fff' : '#5A2A4A',
           borderRadius: 999, padding: '4px 20px', marginBottom: 28,
+          border: phase === 'stealing' ? 'none' : '2px solid rgba(90,42,74,0.15)',
           fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600,
           fontSize: 'clamp(16px,2vw,24px)', letterSpacing: 1,
         }}>
@@ -118,7 +119,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
           {phase === 'stealing' ? ' · ROBO' : ''}
         </div>
         <p style={{
-          color: '#FFD6E7',
+          color: '#5A2A4A',
           fontFamily: 'Quicksand, sans-serif', fontWeight: 800,
           fontSize: 'clamp(40px,5.5vw,80px)',
           lineHeight: 1.2, margin: '0 0 32px',
@@ -152,7 +153,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
     return (
       <div style={centered}>
         <p style={{
-          color: 'rgba(255,214,231,0.8)',
+          color: '#5A2A4A',
           fontFamily: 'Quicksand, sans-serif', fontWeight: 700,
           fontSize: 'clamp(28px,3.5vw,52px)',
           lineHeight: 1.3, margin: '0 0 28px',
@@ -181,7 +182,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
           )
           : (
             <p style={{
-              color: 'rgba(255,255,255,0.45)',
+              color: 'rgba(90,42,74,0.45)',
               fontFamily: 'Quicksand, sans-serif', fontWeight: 700,
               fontSize: 'clamp(20px,2.5vw,36px)', margin: 0,
             }}>
@@ -206,10 +207,10 @@ export default function Presenter() {
   if (!room) {
     return (
       <div style={{
-        width: '100vw', height: '100vh', background: '#1A0A14',
+        width: '100vw', height: '100vh',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <p style={{ color: '#FFD6E7', fontFamily: 'Pixelify Sans, sans-serif', fontSize: 32 }}>
+        <p style={{ color: '#5A2A4A', fontFamily: 'Pixelify Sans, sans-serif', fontSize: 32 }}>
           Sala no encontrada.
         </p>
       </div>
@@ -227,7 +228,7 @@ export default function Presenter() {
           height: '100%', textAlign: 'center',
         }}>
           <p style={{
-            color: '#FFD6E7', fontFamily: 'Pixelify Sans, sans-serif',
+            color: '#5A2A4A', fontFamily: 'Pixelify Sans, sans-serif',
             fontSize: 'clamp(32px,4vw,56px)', fontWeight: 600, margin: 0,
           }}>
             ¡Ya empezamos!
@@ -244,7 +245,6 @@ export default function Presenter() {
   return (
     <div style={{
       width: '100vw', height: '100vh',
-      background: '#1A0A14',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
     }}>
