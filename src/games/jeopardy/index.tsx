@@ -285,7 +285,6 @@ export const jeopardyGame: GameConfig = {
                 alignItems: 'center', justifyContent: 'center',
                 textAlign: 'center', padding: 24, gap: 16,
               }}>
-                <div style={{ fontSize: 64 }}>🎉</div>
                 <p style={{
                   fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 26,
                   color: '#22c55e', margin: 0,
@@ -310,7 +309,6 @@ export const jeopardyGame: GameConfig = {
             alignItems: 'center', justifyContent: 'center',
             textAlign: 'center', padding: 24, gap: 16,
           }}>
-            <div style={{ fontSize: 64 }}>😔</div>
             <p style={{
               fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 24,
               color: '#ef4444', margin: 0,
