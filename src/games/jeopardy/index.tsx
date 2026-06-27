@@ -1,3 +1,4 @@
+import { type ReactElement } from 'react'
 import jeopardyData from '../../content/jeopardy.json'
 import type { GameConfig } from '../registry'
 import type { JeopardyTeam } from '../../lib/types'
@@ -205,7 +206,7 @@ export const jeopardyGame: GameConfig = {
     const isMyTeamTurn = myTeamIdx === currentTeamIdx
     const board = gs.board ?? []
 
-    const wrap = (content: JSX.Element) =>
+    const wrap = (content: ReactElement) =>
       myTeam ? (
         <>
           <GameHeader myTeam={myTeam} teams={teams} />
