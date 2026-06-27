@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useRoom } from '../lib/room'
-import { setActiveGame, setPhase, resetScores, clearGameData } from '../lib/actions'
+import { setActiveGame, setPhase, resetScores, clearGameData, patchGameState } from '../lib/actions'
 import { GameCard } from '../components/ui/GameCard'
 import { PillButton } from '../components/ui/PillButton'
 import { SeedPanel } from '../components/seed/SeedPanel'
@@ -85,7 +85,7 @@ export default function Host() {
       <div>
         <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(90,42,74,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
-            onClick={() => { if (confirm('¿Salir del juego actual?')) setActiveGame(room!.id, null, {}) }}
+            onClick={() => patchGameState(room!.id, room!.game_state, { phase: 'finished' })}
             style={{
               background: '#fff', border: '2.5px solid #5A2A4A',
               color: '#5A2A4A', borderRadius: 999, padding: '6px 18px',
@@ -93,7 +93,7 @@ export default function Host() {
               fontWeight: 700, fontSize: 13, touchAction: 'manipulation',
             }}
           >
-            ← Salir
+            Cerrar juego
           </button>
           <span style={{ fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600, color: '#5A2A4A', fontSize: 16, letterSpacing: 0.5 }}>
             {cfg.id === 'jeopardy' ? 'Jeopardy' : cfg.id === 'most_likely' ? 'Más probable' : 'Dos verdades'}

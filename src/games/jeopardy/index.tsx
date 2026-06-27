@@ -207,11 +207,22 @@ export const jeopardyGame: GameConfig = {
     }
 
     if (phase === 'finished') {
+      const myFinishedTeam = getMyTeam(teams, me.id)
+      const sorted = [...teams].sort((a, b) => b.score - a.score)
+      const myRank = myFinishedTeam ? sorted.findIndex((t) => t.id === myFinishedTeam.id) + 1 : 0
+      const rankLabel = (['1ero', '2do', '3ro', '4to'] as const)[myRank - 1] ?? `${myRank}ro`
       return (
-        <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 22, fontWeight: 800 }}>
-            ¡Terminó! Mirá la pantalla
-          </p>
+        <div style={{ padding: 24 }}>
+          {myFinishedTeam && myRank > 0 && (
+            <p style={{
+              fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 28,
+              textAlign: 'center', margin: '0 0 8px',
+              color: myRank === 1 ? '#22c55e' : '#5A2A4A',
+            }}>
+              Saliste {rankLabel}!
+            </p>
+          )}
+          <TeamPodium teams={teams} />
         </div>
       )
     }
