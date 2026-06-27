@@ -7,7 +7,7 @@ import { TeamPodium } from '../games/jeopardy/index'
 import { isCorrect, jRoundKey } from '../games/jeopardy/utils'
 import jeopardyData from '../content/jeopardy.json'
 import { DEFAULT_ROOM } from '../lib/config'
-import type { JeopardyTeam, GameState, Answer } from '../lib/types'
+import type { JeopardyTeam, GameState, Answer, Player } from '../lib/types'
 
 const CATEGORIES = jeopardyData.categories
 const BAND_H = 120
@@ -56,7 +56,7 @@ function ScoreBand({ teams, currentTeamIndex }: { teams: JeopardyTeam[]; current
 
 // ── Jeopardy phase content ────────────────────────────────────────────────────
 
-function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: JeopardyTeam[]; answers: Answer[] }) {
+function JeopardyContent({ gs, teams, answers, players }: { gs: GameState; teams: JeopardyTeam[]; answers: Answer[]; players: Player[] }) {
   const phase = gs.phase
 
   const centered = {
@@ -87,14 +87,33 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
   }
 
   if (phase === 'picking') {
+    const ct = teams[gs.current_team_index ?? 0]
+    const captainName = players.find((p) => p.id === ct?.captain_id)?.name ?? 'el capitán'
     return (
       <div style={{ padding: '24px 40px' }}>
+        {ct && (
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
+            <div style={{
+              fontFamily: 'Pixelify Sans, sans-serif', fontWeight: 600,
+              fontSize: 'clamp(32px,4vw,52px)', color: ct.color, lineHeight: 1.1,
+            }}>
+              Turno {ct.name}
+            </div>
+            <div style={{
+              fontFamily: 'Quicksand, sans-serif', fontWeight: 700,
+              fontSize: 'clamp(22px,2.5vw,36px)', color: '#5A2A4A', marginTop: 6,
+            }}>
+              {captainName} debe elegir
+            </div>
+          </div>
+        )}
         <JeopardyBoard
           categories={CATEGORIES}
           board={gs.board ?? []}
           teams={teams}
           currentTeamIndex={gs.current_team_index ?? 0}
           hideScores
+          hideTurnLabel
         />
       </div>
     )
@@ -202,7 +221,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
 
 export default function Presenter() {
   const { code = DEFAULT_ROOM } = useParams()
-  const { room, answers, loading } = useRoom(code)
+  const { room, players, answers, loading } = useRoom(code)
 
   if (loading) return <Loading />
   if (!room) {
@@ -238,7 +257,7 @@ export default function Presenter() {
       )
     }
     if (room.active_game === 'jeopardy') {
-      return <JeopardyContent gs={gs} teams={teams} answers={answers} />
+      return <JeopardyContent gs={gs} teams={teams} answers={answers} players={players} />
     }
     return null
   })()

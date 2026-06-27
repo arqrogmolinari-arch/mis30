@@ -14,16 +14,17 @@ interface BoardProps {
   onPick?: (catI: number, valI: number) => void
   interactive?: boolean
   hideScores?: boolean
+  hideTurnLabel?: boolean
 }
 
 export function JeopardyBoard({
-  categories, board, teams, currentTeamIndex, onPick, interactive = false, hideScores = false,
+  categories, board, teams, currentTeamIndex, onPick, interactive = false, hideScores = false, hideTurnLabel = false,
 }: BoardProps) {
   const ct = teams[currentTeamIndex]
 
   return (
     <div>
-      {ct && (
+      {ct && !hideTurnLabel && (
         <p style={{
           textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif',
           fontWeight: 800, color: '#5A2A4A', fontSize: 16, margin: '0 0 10px',
