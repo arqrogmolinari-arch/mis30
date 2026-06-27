@@ -9,7 +9,7 @@ import { WaitingGame } from '../../components/ui/WaitingGame'
 import { setActiveGame, patchGameState } from '../../lib/actions'
 import { SetupPanel } from './setup'
 import { JeopardyBoard } from './board'
-import { AnsweringGuest, StealingGuest, RevealingScreen, RevealingHost } from './question'
+import { AnsweringGuest, StealingGuest, RevealingScreen, RevealingHost, Confetti } from './question'
 import { jRoundKey, getMyTeam, isCaptain, isCorrect } from './utils'
 
 const CATEGORIES = jeopardyData.categories
@@ -266,6 +266,63 @@ export const jeopardyGame: GameConfig = {
       return wrap(<StealingGuest ctx={ctx} catI={aq.cat_i} valI={aq.val_i} q={q} canSteal={imCaptain && !isMyTeamTurn} />)
     }
     if (phase === 'revealing') {
+      const rk = jRoundKey(aq.cat_i, aq.val_i)
+      const roundAnswers = ctx.answers.filter((a) => a.round_key === rk)
+      const overrides = (gs.overrides ?? {}) as Record<string, 'correct' | 'incorrect'>
+      const myTeamAnswer = roundAnswers.find((a) => myTeam?.member_ids.includes(a.player_id))
+
+      if (myTeamAnswer) {
+        const correct = overrides[myTeamAnswer.player_id] != null
+          ? overrides[myTeamAnswer.player_id] === 'correct'
+          : isCorrect(String(myTeamAnswer.value), q.accept)
+
+        if (correct) {
+          return wrap(
+            <>
+              <Confetti />
+              <div style={{
+                minHeight: '80dvh', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                textAlign: 'center', padding: 24, gap: 16,
+              }}>
+                <div style={{ fontSize: 64 }}>🎉</div>
+                <p style={{
+                  fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 26,
+                  color: '#22c55e', margin: 0,
+                }}>¡Tu respuesta es correcta!</p>
+                <p style={{
+                  fontFamily: 'Quicksand, sans-serif', fontWeight: 700, fontSize: 20,
+                  color: '#5A2A4A', margin: 0,
+                }}>
+                  Sumaste{' '}
+                  <strong style={{ color: myTeam?.color }}>{q.value} puntos</strong>
+                  {' '}para el equipo{' '}
+                  <strong style={{ color: myTeam?.color }}>{myTeam?.name}</strong>
+                </p>
+              </div>
+            </>
+          )
+        }
+
+        return wrap(
+          <div style={{
+            minHeight: '80dvh', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            textAlign: 'center', padding: 24, gap: 16,
+          }}>
+            <div style={{ fontSize: 64 }}>😔</div>
+            <p style={{
+              fontFamily: 'Quicksand, sans-serif', fontWeight: 800, fontSize: 24,
+              color: '#ef4444', margin: 0,
+            }}>Tu respuesta es incorrecta</p>
+            <p style={{
+              fontFamily: 'Quicksand, sans-serif', fontWeight: 600, fontSize: 16,
+              color: '#A06080', margin: 0,
+            }}>Probá en la próxima ronda</p>
+          </div>
+        )
+      }
+
       return wrap(
         <div style={{ padding: 24, textAlign: 'center' }}>
           <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>

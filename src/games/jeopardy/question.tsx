@@ -9,6 +9,48 @@ import type { JCategory } from './board'
 
 type Q = JCategory['questions'][0]
 
+// ── Confetti ──────────────────────────────────────────────────────────────────
+
+const CONFETTI_CSS = `
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  75%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(900deg); opacity: 0; }
+}
+`
+
+export function Confetti() {
+  const COLORS = ['#FF4FB6', '#FFD23F', '#B86CD9', '#22c55e', '#60a5fa', '#ff7043', '#FFA0D4', '#A8E6CF']
+  const pieces = Array.from({ length: 56 }, (_, i) => ({
+    id: i,
+    left: `${((i * 13 + Math.floor(i / 8) * 5) % 96).toFixed(0)}%`,
+    delay: `${(i % 14) * 0.12}s`,
+    color: COLORS[i % COLORS.length],
+    size: 7 + (i % 6),
+    duration: `${2.3 + (i % 10) * 0.18}s`,
+    isRect: i % 3 !== 0,
+  }))
+
+  return (
+    <>
+      <style>{CONFETTI_CSS}</style>
+      <div style={{
+        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+        pointerEvents: 'none', zIndex: 100, overflow: 'hidden',
+      }}>
+        {pieces.map((p) => (
+          <div key={p.id} style={{
+            position: 'absolute', top: -20, left: p.left,
+            width: p.size, height: p.isRect ? p.size * 1.8 : p.size,
+            borderRadius: p.isRect ? 3 : '50%', background: p.color,
+            animation: `confettiFall ${p.duration} ${p.delay} ease-in forwards`,
+          }} />
+        ))}
+      </div>
+    </>
+  )
+}
+
 // ── Answering: guest ──────────────────────────────────────────────────────────
 
 export function AnsweringGuest({
