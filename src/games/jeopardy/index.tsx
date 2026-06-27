@@ -3,6 +3,7 @@ import type { GameConfig } from '../registry'
 import type { JeopardyTeam } from '../../lib/types'
 import { PillButton } from '../../components/ui/PillButton'
 import { Countdown } from '../../components/ui/Countdown'
+import { GameHeader } from '../../components/ui/GameHeader'
 import { setActiveGame, patchGameState } from '../../lib/actions'
 import { SetupPanel } from './setup'
 import { JeopardyBoard } from './board'
@@ -204,9 +205,17 @@ export const jeopardyGame: GameConfig = {
     const isMyTeamTurn = myTeamIdx === currentTeamIdx
     const board = gs.board ?? []
 
+    const wrap = (content: JSX.Element) =>
+      myTeam ? (
+        <>
+          <GameHeader myTeam={myTeam} teams={teams} />
+          <div style={{ paddingTop: 44 }}>{content}</div>
+        </>
+      ) : content
+
     if (phase === 'picking') {
       if (isMyTeamTurn && imCaptain) {
-        return (
+        return wrap(
           <div style={{ padding: 12 }}>
             <JeopardyBoard
               categories={CATEGORIES} board={board}
@@ -226,7 +235,7 @@ export const jeopardyGame: GameConfig = {
       }
       const ct = teams[currentTeamIdx]
       const captain = ct ? ctx.players.find((p) => p.id === ct.captain_id) : null
-      return (
+      return wrap(
         <div style={{
           minHeight: '100dvh', background: '#FFD6E7',
           display: 'flex', flexDirection: 'column',
@@ -253,13 +262,13 @@ export const jeopardyGame: GameConfig = {
     if (!q) return null
 
     if (phase === 'answering') {
-      return <AnsweringGuest ctx={ctx} catI={aq.cat_i} valI={aq.val_i} q={q} isMyTurn={isMyTeamTurn && imCaptain} />
+      return wrap(<AnsweringGuest ctx={ctx} catI={aq.cat_i} valI={aq.val_i} q={q} isMyTurn={isMyTeamTurn && imCaptain} />)
     }
     if (phase === 'stealing') {
-      return <StealingGuest ctx={ctx} catI={aq.cat_i} valI={aq.val_i} q={q} canSteal={imCaptain && !isMyTeamTurn} />
+      return wrap(<StealingGuest ctx={ctx} catI={aq.cat_i} valI={aq.val_i} q={q} canSteal={imCaptain && !isMyTeamTurn} />)
     }
     if (phase === 'revealing') {
-      return (
+      return wrap(
         <div style={{ padding: 24, textAlign: 'center' }}>
           <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20, fontWeight: 800 }}>{q.q}</p>
           <div style={{
