@@ -59,6 +59,7 @@ export function AnsweringGuest({
   const { room, me } = ctx
   const gs = room.game_state
   const [text, setText] = useState('')
+  const [sent, setSent] = useState(false)
   const rk = jRoundKey(catI, valI)
 
   if (!isMyTurn) {
@@ -80,6 +81,7 @@ export function AnsweringGuest({
         onChange={(e) => setText(e.target.value)}
         placeholder="Escribí la respuesta…"
         rows={2}
+        disabled={sent}
         style={{
           width: '100%', padding: 12, borderRadius: 12,
           border: '2px solid #B86CD9', fontFamily: 'inherit',
@@ -88,10 +90,15 @@ export function AnsweringGuest({
       />
       <div style={{ marginTop: 8 }}>
         <PillButton
-          disabled={!text.trim()}
-          onClick={() => me && submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())}
+          disabled={!text.trim() || sent}
+          style={sent ? { background: '#22c55e', borderColor: '#16a34a' } : undefined}
+          onClick={() => {
+            if (!me || sent) return
+            submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())
+            setSent(true)
+          }}
         >
-          Enviar ✓
+          {sent ? 'Respuesta enviada ✓' : 'Enviar ✓'}
         </PillButton>
       </div>
     </div>
@@ -106,6 +113,7 @@ export function StealingGuest({
   const { room, me } = ctx
   const gs = room.game_state
   const [text, setText] = useState('')
+  const [sent, setSent] = useState(false)
   const rk = jRoundKey(catI, valI)
 
   if (!canSteal) {
@@ -129,6 +137,7 @@ export function StealingGuest({
         onChange={(e) => setText(e.target.value)}
         placeholder="Escribí la respuesta…"
         rows={2}
+        disabled={sent}
         style={{
           width: '100%', padding: 12, borderRadius: 12,
           border: '2px solid #FF4FB6', fontFamily: 'inherit',
@@ -137,10 +146,15 @@ export function StealingGuest({
       />
       <div style={{ marginTop: 8 }}>
         <PillButton
-          disabled={!text.trim()}
-          onClick={() => me && submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())}
+          disabled={!text.trim() || sent}
+          style={sent ? { background: '#22c55e', borderColor: '#16a34a' } : undefined}
+          onClick={() => {
+            if (!me || sent) return
+            submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())
+            setSent(true)
+          }}
         >
-          ¡Robar!
+          {sent ? 'Respuesta enviada ✓' : '¡Robar!'}
         </PillButton>
       </div>
     </div>

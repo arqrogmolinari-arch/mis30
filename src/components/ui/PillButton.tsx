@@ -16,7 +16,7 @@ export function PillButton({ variant = 'primary', selected, disabled, style, ...
         opacity: disabled ? 0.45 : 1,
         fontFamily: 'Quicksand, sans-serif',
         fontWeight: 700, letterSpacing: '0.3px',
-        fontSize: 16, padding: '13px 24px', borderRadius: 999,
+        fontSize: 16, padding: '13px 24px', borderRadius: 999, width: '100%',
         border: '2.5px solid #5A2A4A',
         color: variant === 'primary' ? '#fff' : '#5A2A4A',
         background: variant === 'primary' ? '#FF4FB6' : 'rgba(255,255,255,0.85)',
