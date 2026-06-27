@@ -5,6 +5,7 @@ import type { JeopardyTeam } from '../../lib/types'
 import { PillButton } from '../../components/ui/PillButton'
 import { Countdown } from '../../components/ui/Countdown'
 import { GameHeader } from '../../components/ui/GameHeader'
+import { WaitingGame } from '../../components/ui/WaitingGame'
 import { setActiveGame, patchGameState } from '../../lib/actions'
 import { SetupPanel } from './setup'
 import { JeopardyBoard } from './board'
@@ -179,14 +180,10 @@ export const jeopardyGame: GameConfig = {
     const teams: JeopardyTeam[] = room.teams ?? []
     const phase = gs.phase
 
-    if (phase === 'setup' || !me) {
-      return (
-        <div style={{ padding: 24, textAlign: 'center' }}>
-          <p style={{ color: '#5A2A4A', fontFamily: 'Quicksand, sans-serif', fontSize: 20 }}>
-            El host está armando los equipos…
-          </p>
-        </div>
-      )
+    if (!me) return null
+
+    if (phase === 'setup') {
+      return <WaitingGame name={me.name} />
     }
 
     if (phase === 'finished') {
