@@ -86,12 +86,15 @@ export function AnsweringGuest({
           width: '100%', padding: 12, borderRadius: 12,
           border: '2px solid #B86CD9', fontFamily: 'inherit',
           fontSize: 16, resize: 'none', boxSizing: 'border-box', marginTop: 10,
+          opacity: 1,
         }}
       />
       <div style={{ marginTop: 8 }}>
         <PillButton
           disabled={!text.trim() || sent}
-          style={sent ? { background: '#22c55e', borderColor: '#16a34a' } : undefined}
+          style={sent
+            ? { background: '#22c55e', borderColor: '#16a34a', opacity: 1 }
+            : { opacity: 1 }}
           onClick={() => {
             if (!me || sent) return
             submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())
@@ -142,12 +145,15 @@ export function StealingGuest({
           width: '100%', padding: 12, borderRadius: 12,
           border: '2px solid #FF4FB6', fontFamily: 'inherit',
           fontSize: 16, resize: 'none', boxSizing: 'border-box', marginTop: 10,
+          opacity: 1,
         }}
       />
       <div style={{ marginTop: 8 }}>
         <PillButton
           disabled={!text.trim() || sent}
-          style={sent ? { background: '#22c55e', borderColor: '#16a34a' } : undefined}
+          style={sent
+            ? { background: '#22c55e', borderColor: '#16a34a', opacity: 1 }
+            : { opacity: 1 }}
           onClick={() => {
             if (!me || sent) return
             submitAnswer(room.id, me.id, 'jeopardy', rk, text.trim())

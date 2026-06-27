@@ -1,7 +1,7 @@
-import { type ReactElement } from 'react'
+import { type ReactElement, useEffect } from 'react'
 import jeopardyData from '../../content/jeopardy.json'
 import type { GameConfig } from '../registry'
-import type { JeopardyTeam } from '../../lib/types'
+import type { JeopardyTeam, GameState } from '../../lib/types'
 import { PillButton } from '../../components/ui/PillButton'
 import { Countdown } from '../../components/ui/Countdown'
 import { GameHeader } from '../../components/ui/GameHeader'
@@ -78,6 +78,26 @@ export function TeamPodium({ teams }: { teams: JeopardyTeam[] }) {
       </div>
     </div>
   )
+}
+
+function AutoStealOnTimeout({ roomId, gs, hasAnswer }: {
+  roomId: string
+  gs: GameState
+  hasAnswer: boolean
+}) {
+  useEffect(() => {
+    if (!gs.timer_ends_at || hasAnswer) return
+    const remaining = new Date(gs.timer_ends_at).getTime() - Date.now()
+    const delay = Math.max(0, remaining)
+    const t = setTimeout(() => {
+      patchGameState(roomId, gs, {
+        phase: 'stealing', steal_open: true,
+        timer_ends_at: new Date(Date.now() + 60_000).toISOString(),
+      })
+    }, delay)
+    return () => clearTimeout(t)
+  }, [gs.timer_ends_at, roomId, hasAnswer])
+  return null
 }
 
 export const jeopardyGame: GameConfig = {
@@ -382,6 +402,7 @@ export const jeopardyGame: GameConfig = {
 
       return (
         <div style={{ padding: 16 }}>
+          <AutoStealOnTimeout roomId={room.id} gs={gs} hasAnswer={roundAnswers.length > 0} />
           <p style={{ color: '#5A2A4A', fontWeight: 800, fontFamily: 'Quicksand, sans-serif', fontSize: 14, marginBottom: 10 }}>{q.q}</p>
 
           {roundAnswers.length === 0 ? (
