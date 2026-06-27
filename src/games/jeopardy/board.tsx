@@ -15,10 +15,11 @@ interface BoardProps {
   interactive?: boolean
   hideScores?: boolean
   hideTurnLabel?: boolean
+  large?: boolean
 }
 
 export function JeopardyBoard({
-  categories, board, teams, currentTeamIndex, onPick, interactive = false, hideScores = false, hideTurnLabel = false,
+  categories, board, teams, currentTeamIndex, onPick, interactive = false, hideScores = false, hideTurnLabel = false, large = false,
 }: BoardProps) {
   const ct = teams[currentTeamIndex]
 
@@ -44,9 +45,9 @@ export function JeopardyBoard({
           <div key={ci} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             textAlign: 'center', fontFamily: 'Pixelify Sans, sans-serif',
-            fontWeight: 800, fontSize: 11, color: '#5A2A4A',
-            padding: '6px 2px', background: 'rgba(255,255,255,0.6)',
-            borderRadius: 7, minHeight: 36,
+            fontWeight: 800, fontSize: large ? 18 : 11, color: '#5A2A4A',
+            padding: large ? '10px 4px' : '6px 2px', background: 'rgba(255,255,255,0.6)',
+            borderRadius: 7, minHeight: large ? 64 : 36,
           }}>
             {cat.name}
           </div>
@@ -69,10 +70,10 @@ export function JeopardyBoard({
                     ? 'rgba(90,42,74,0.07)'
                     : `linear-gradient(135deg,${ct?.color ?? '#FF4FB6'},#B86CD9)`,
                   color: played ? 'transparent' : 'white',
-                  fontWeight: 800, fontSize: 18,
+                  fontWeight: 800, fontSize: large ? 28 : 18,
                   fontFamily: 'Pixelify Sans, sans-serif',
                   boxShadow: played ? 'none' : '0 3px 0 rgba(0,0,0,0.12)',
-                  minHeight: 52,
+                  minHeight: large ? 80 : 52,
                 }}
               >
                 {played ? '' : val}

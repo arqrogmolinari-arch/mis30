@@ -114,6 +114,7 @@ function JeopardyContent({ gs, teams, answers, players }: { gs: GameState; teams
           currentTeamIndex={gs.current_team_index ?? 0}
           hideScores
           hideTurnLabel
+          large
         />
       </div>
     )
