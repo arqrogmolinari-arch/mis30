@@ -13,10 +13,11 @@ interface BoardProps {
   currentTeamIndex: number
   onPick?: (catI: number, valI: number) => void
   interactive?: boolean
+  hideScores?: boolean
 }
 
 export function JeopardyBoard({
-  categories, board, teams, currentTeamIndex, onPick, interactive = false,
+  categories, board, teams, currentTeamIndex, onPick, interactive = false, hideScores = false,
 }: BoardProps) {
   const ct = teams[currentTeamIndex]
 
@@ -80,7 +81,7 @@ export function JeopardyBoard({
         )}
       </div>
 
-      {teams.length > 0 && (
+      {teams.length > 0 && !hideScores && (
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 14, flexWrap: 'wrap' }}>
           {teams.map((t, ti) => (
             <div key={t.id} style={{

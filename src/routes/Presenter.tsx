@@ -94,6 +94,7 @@ function JeopardyContent({ gs, teams, answers }: { gs: GameState; teams: Jeopard
           board={gs.board ?? []}
           teams={teams}
           currentTeamIndex={gs.current_team_index ?? 0}
+          hideScores
         />
       </div>
     )
